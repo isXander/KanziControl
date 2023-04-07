@@ -1,0 +1,13 @@
+{
+  "package": "dev.isxander.kanzicontrol.mixins",
+  "required": true,
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+  ],
+  "client": [
+    "ClientPacketListenerMixin",
+    "GameRendererMixin",
+    "MouseHandlerMixin"
+  ]
+}

@@ -8,21 +8,24 @@
     "isXander"
   ],
   "contact": {
-    "homepage": "https://isxander.dev",
-    "issues": "https://github.com/${github}/issues",
-    "sources": "https://github.com/${github}"
+    "homepage": "https://isxander.dev"
   },
   "license": "LGPL-3.0-or-later",
   "environment": "client",
   "entrypoints": {
-
+    "client": [
+      "dev.isxander.kanzicontrol.KanziControl"
+    ],
+    "preLaunch": [
+      "com.llamalad7.mixinextras.MixinExtrasBootstrap::init"
+    ]
   },
   "mixins": [
-    "fabric-mod-template.mixins.json"
+    "kanzi-control.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.0",
-    "minecraft": "1.19.x",
+    "minecraft": "1.19.4",
     "java": ">=17"
   }
 }
