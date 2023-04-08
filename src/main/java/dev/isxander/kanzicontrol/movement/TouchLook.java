@@ -43,7 +43,7 @@ public class TouchLook implements InteractionArea {
     }
 
     @Override
-    public void render(PoseStack stack, float deltaTime, Vector2fc position) {
+    public void render(PoseStack stack, float deltaTime, Vector2fc position, boolean interacting) {
         // no actual rendering, but we need to update every frame...
         if (minecraft().player != null) {
             float degreesPerFrame = KanziConfig.INSTANCE.getConfig().touchLookDegreesPerSecond / 20f * deltaTime;

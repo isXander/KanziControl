@@ -1,42 +1,42 @@
 package dev.isxander.kanzicontrol.interactionarea;
 
 import com.google.common.collect.ImmutableList;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractInteractionAreaContainer implements InteractionAreaContainer {
-    private final List<InteractionArea> areas = new ArrayList<>();
-    private InteractionArea currentInteractionArea = InteractionArea.EMPTY;
+public abstract class AbstractInteractionAreaContainer<T extends InteractionArea> implements InteractionAreaContainer<T> {
+    private final List<T> areas = new ArrayList<>();
+    private T currentInteractionArea = null;
 
     @Override
-    public void setCurrentInteractionArea(InteractionArea currentInteractionArea) {
+    public void setCurrentInteractionArea(T currentInteractionArea) {
         this.currentInteractionArea = currentInteractionArea;
     }
 
-    @NotNull
+    @Nullable
     @Override
-    public InteractionArea getCurrentInteractionArea() {
+    public T getCurrentInteractionArea() {
         return currentInteractionArea;
     }
 
     @Override
-    public List<InteractionArea> getInteractionAreas() {
+    public List<T> getInteractionAreas() {
         return ImmutableList.copyOf(areas);
     }
 
-    public <T extends InteractionArea> T insertTop(T area) {
+    public <U extends T> U insertTop(U area) {
         areas.add(area);
         return area;
     }
 
-    public <T extends InteractionArea> T insertBottom(T area) {
+    public <U extends T> U insertBottom(U area) {
         areas.add(0, area);
         return area;
     }
 
-    public <T extends InteractionArea> T insertAbove(T area, InteractionArea above) {
+    public <U extends T> U insertAbove(U area, T above) {
         int index = areas.indexOf(above);
         if (index == -1)
             throw new IllegalArgumentException("InteractionArea " + above + " is not registered!");
@@ -45,7 +45,7 @@ public abstract class AbstractInteractionAreaContainer implements InteractionAre
         return area;
     }
 
-    public <T extends InteractionArea> T insertBelow(T area, InteractionArea below) {
+    public <U extends T> U insertBelow(U area, T below) {
         int index = areas.indexOf(below);
         if (index == -1)
             throw new IllegalArgumentException("InteractionArea " + below + " is not registered!");

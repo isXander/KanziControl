@@ -1,16 +1,24 @@
 package dev.isxander.kanzicontrol.movement;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
+import net.minecraft.client.player.LocalPlayer;
 
 public class TouchMovementInput extends Input {
     public static final TouchMovementInput INSTANCE = new TouchMovementInput();
 
     private int jumpTimer = 0;
+    private boolean swimDown = false;
 
     @Override
     public void tick(boolean slowDown, float movementMultiplier) {
         if (jumpTimer-- <= 0) {
             this.jumping = false;
+        }
+        jumpTimer = Math.max(jumpTimer, 0);
+
+        if (getPlayer().isInWater() && !swimDown) {
+            this.jumping = true;
         }
     }
 
@@ -39,5 +47,9 @@ public class TouchMovementInput extends Input {
             this.jumping = true;
             jumpTimer = 5;
         }
+    }
+
+    private LocalPlayer getPlayer() {
+        return Minecraft.getInstance().player;
     }
 }

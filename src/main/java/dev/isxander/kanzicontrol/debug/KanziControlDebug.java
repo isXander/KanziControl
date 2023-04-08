@@ -7,6 +7,6 @@ public class KanziControlDebug {
 
     private static boolean prop(String name, boolean def, boolean defDevenv) {
         boolean defThisEnv = FabricLoader.getInstance().isDevelopmentEnvironment() ? defDevenv : def;
-        return Boolean.parseBoolean(System.getProperty("kanzi." + name, Boolean.toString(def)));
+        return Boolean.parseBoolean(System.getProperty("kanzi." + name, Boolean.toString(defThisEnv)));
     }
 }
