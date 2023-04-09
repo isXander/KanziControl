@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.mixins;
 
+import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.isxander.kanzicontrol.debug.KanziControlDebug;
 import dev.isxander.kanzicontrol.interactionarea.InteractionAreaStorage;
@@ -20,6 +21,10 @@ public class MouseHandlerMixin {
     @Shadow private double xpos;
     @Shadow private double ypos;
 
+    @Shadow private int activeButton;
+
+    @Shadow private double mousePressedTime;
+
     /**
      * Don't lock the mouse we need it for touch input!
      */
@@ -39,9 +44,13 @@ public class MouseHandlerMixin {
 
         boolean isPress = action == GLFW.GLFW_PRESS;
 
+        activeButton = -1;
         if (button == InputConstants.MOUSE_BUTTON_LEFT) {
             isLeftPressed = isPress;
             if (isPress) {
+                activeButton = 0;
+                mousePressedTime = Blaze3D.getTime();
+
                 InteractionAreaStorage.onMouseDown((float) xpos, (float) ypos);
             } else {
                 InteractionAreaStorage.onMouseUp((float) xpos, (float) ypos);

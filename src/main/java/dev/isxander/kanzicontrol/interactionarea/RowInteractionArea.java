@@ -53,6 +53,13 @@ public class RowInteractionArea extends AbstractInteractionAreaContainer<Positio
     }
 
     @Override
+    public boolean isInBounds(Vector2fc position) {
+        // super = AbstractInteractionAreaContainer so equivalent to
+        // InteractionAreaStorage.super.isInBounds(position)
+        return super.isInBounds(position);
+    }
+
+    @Override
     public void setPosition(float x, float y) {
         float width = 0;
         for (var element : getInteractionAreas()) {
@@ -110,6 +117,11 @@ public class RowInteractionArea extends AbstractInteractionAreaContainer<Positio
 
         public Builder elements(PositionableElement... elements) {
             this.elements.addAll(Arrays.asList(elements));
+            return this;
+        }
+
+        public Builder elements(Collection<? extends PositionableElement> elements) {
+            this.elements.addAll(elements);
             return this;
         }
 

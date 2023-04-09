@@ -57,4 +57,12 @@ public interface InteractionAreaContainer<T extends InteractionArea> extends Int
             area.tick(position, area == getCurrentInteractionArea());
         }
     }
+
+    @Override
+    default boolean isInBounds(Vector2fc position) {
+        for (InteractionArea area : getInteractionAreas()) {
+            if (area.isInBounds(position)) return true;
+        }
+        return false;
+    }
 }

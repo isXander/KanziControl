@@ -1,7 +1,7 @@
 package dev.isxander.kanzicontrol.mixins;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.isxander.kanzicontrol.movement.TouchMovementInput;
+import dev.isxander.kanzicontrol.TouchInput;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.player.LocalPlayer;
@@ -30,6 +30,6 @@ public class ClientPacketListenerMixin {
     }
 
     private void overrideInput(LocalPlayer player) {
-        player.input = TouchMovementInput.INSTANCE;
+        player.input = TouchInput.INSTANCE;
     }
 }

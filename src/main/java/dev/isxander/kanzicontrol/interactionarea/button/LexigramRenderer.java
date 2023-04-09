@@ -6,7 +6,7 @@ import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.resources.ResourceLocation;
 
 public class LexigramRenderer implements ButtonRenderer {
-    private static final int TEXTURE_SIZE = 64;
+    private static final int TEXTURE_SIZE = 128;
 
     private final ResourceLocation textureLocation;
 

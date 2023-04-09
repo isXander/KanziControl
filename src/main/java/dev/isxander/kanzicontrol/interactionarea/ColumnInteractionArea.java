@@ -1,7 +1,5 @@
 package dev.isxander.kanzicontrol.interactionarea;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
 import org.apache.commons.lang3.Validate;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
@@ -54,6 +52,13 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
     }
 
     @Override
+    public boolean isInBounds(Vector2fc position) {
+        // super = AbstractInteractionAreaContainer so equivalent to
+        // InteractionAreaStorage.super.isInBounds(position)
+        return super.isInBounds(position);
+    }
+
+    @Override
     public void setPosition(float x, float y) {
         float height = 0;
         for (var element : getInteractionAreas()) {
@@ -83,9 +88,9 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
     }
 
     public enum ElementPosition {
-        TOP((rowWidth, elementWidth) -> 0f),
+        LEFT((rowWidth, elementWidth) -> 0f),
         BOTTOM((rowWidth, elementWidth) -> rowWidth - elementWidth),
-        MIDDLE((rowWidth, elementWidth) -> rowWidth / 2f - elementWidth / 2f);
+        RIGHT((rowWidth, elementWidth) -> rowWidth / 2f - elementWidth / 2f);
 
         public final BiFunction<Float, Float, Float> positionFunction;
 

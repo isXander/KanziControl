@@ -20,26 +20,26 @@ public class DebugRendering {
     );
     private static int debugColourIndex = -1;
 
-    public static void fillCircle(float x, float y, float radius) {
-        Vector2f descaled = descaledPosition(x, y);
-        int colour = getDebugColor();
+    public static void fillCircle(float x, float y, float radius, int numSegments, int color) {
+        if ((color >> 24 & 0xFF) == 0) return;
 
         BufferBuilder bufferBuilder = Tesselator.getInstance().getBuilder();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.Mode.TRIANGLE_FAN, DefaultVertexFormat.POSITION_COLOR);
-        for (int i = 0; i < 360; i++) {
-            double angle = Math.toRadians(i);
+        for (int i = 0; i < numSegments; i++) {
+            double angle = Math.toRadians(i * 360.0 / numSegments);
             double x1 = Math.sin(angle) * radius;
             double y1 = Math.cos(angle) * radius;
             bufferBuilder
-                    .vertex(descaled.x() + x1, descaled.y() + y1, 0)
+                    .vertex(x + x1, y + y1, 0)
                     .color(
-                            colour >> 16 & 0xFF,
-                            colour >> 8 & 0xFF,
-                            colour & 0xFF,
-                            colour >> 24 & 0xFF)
+                            color >> 16 & 0xFF,
+                            color >> 8 & 0xFF,
+                            color & 0xFF,
+                            color >> 24 & 0xFF
+                    )
                     .endVertex();
         }
         BufferUploader.drawWithShader(bufferBuilder.end());
