@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.interactionarea.reader;
 
+import dev.isxander.kanzicontrol.KanziControl;
 import dev.isxander.kanzicontrol.interactionarea.*;
 import dev.isxander.kanzicontrol.interactionarea.button.*;
 import org.quiltmc.json5.JsonReader;
@@ -31,22 +32,17 @@ public class InteractionAreaReader {
     }
 
     public static List<PositionableElement> readPositionableChildren(JsonReader reader) throws IOException {
-        List<PositionableElement> children = new ArrayList<>();
-
-        reader.beginObject();
-        while (reader.hasNext()) {
-            String name = reader.nextName();
-
-            switch (name) {
-                case "row" -> children.add(readRow(reader));
-                case "column" -> children.add(readColumn(reader));
-                case "button" -> children.add(readButton(reader));
-                default -> reader.skipValue();
-            }
-        }
-        reader.endObject();
-
-        return children;
+        List<InteractionArea> children = readChildren(reader);
+        return children.stream()
+                .filter(area -> {
+                    var isPositionable = area instanceof PositionableElement;
+                    if (!isPositionable) {
+                        KanziControl.LOGGER.error("Whilst reading positionable children came across non-positionable child.");
+                    }
+                    return isPositionable;
+                })
+                .map(PositionableElement.class::cast)
+                .toList();
     }
 
     public static RowInteractionArea readRow(JsonReader reader) throws IOException {
