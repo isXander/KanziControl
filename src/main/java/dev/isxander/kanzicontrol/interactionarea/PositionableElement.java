@@ -26,4 +26,7 @@ public interface PositionableElement extends InteractionArea {
 
         return this;
     }
+
+    record PositionData(AnchorPoint windowAnchor, float x, float y, AnchorPoint origin) {
+    }
 }

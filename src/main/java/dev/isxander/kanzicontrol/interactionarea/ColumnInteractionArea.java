@@ -119,6 +119,11 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
             return this;
         }
 
+        public Builder elements(Collection<? extends PositionableElement> elements) {
+            this.elements.addAll(elements);
+            return this;
+        }
+
         public Builder elementPadding(float padding) {
             this.elementPaddingVertical = padding;
             return this;

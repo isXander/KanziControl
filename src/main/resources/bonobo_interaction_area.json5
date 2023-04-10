@@ -1,0 +1,132 @@
+// Interaction HUD format!
+// - Possible elements are: row, column, button
+// - keys can be repeated - ignore editor warnings,
+// - window anchor and origin have possible values: TOP_LEFT, TOP_CENTER, TOP_RIGHT, CENTER_LEFT, CENTER, CENTER_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
+// - button renderers have possible types: lexigram, empty color
+//   - extra lexigrams cannot be added
+//   - color renderers expect colors in format ARGB
+// - buttons cannot be positioned outside of rows or columns
+
+{
+  "row": {
+    "window_anchor": "TOP_CENTER",
+    "offset": [0, 0],
+    "origin": "TOP_CENTER",
+    "element_padding": 3.0,
+    "children": {
+      "button": {
+        "renderer": {
+          "type": "lexigram",
+          "lexigram": "jump"
+        },
+        "size": [30.0, 30.0],
+        "action": "jump"
+      },
+      "button": {
+        "renderer": {
+          "type": "lexigram",
+          "lexigram": "break"
+        },
+        "size": [30.0, 30.0],
+        "action": "break"
+      },
+      "button": {
+        "renderer": {
+          "type": "lexigram",
+          "lexigram": "fight"
+        },
+        "size": [30.0, 30.0],
+        "action": "fight"
+      },
+      "button": {
+        "renderer": {
+          "type": "color",
+          "color": 0xFF00FF00
+        },
+        "size": [30.0, 30.0],
+        "action": "use"
+      },
+      "button": {
+        "renderer": {
+          "type": "color",
+          "color": 0xFF0000FF
+        },
+        "size": [30.0, 30.0],
+        "action": "swim_down"
+      },
+    }
+  },
+  "row": {
+    "window_anchor": "BOTTOM_CENTER",
+    "offset": [0, 0],
+    "origin": "BOTTOM_CENTER",
+    "element_padding": 4.0,
+    "row_padding": [0.0, 0.0, 0.0, 2.0],
+    "element_position": "BOTTOM",
+    "children": {
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_1"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_2"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_3"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_4"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_5"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_6"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_7"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_8"
+      },
+      "button": {
+        "renderer": {
+          "type": "empty"
+        },
+        "size": [16.0, 16.0],
+        "action": "hotbar_slot_9"
+      }
+    }
+  }
+}

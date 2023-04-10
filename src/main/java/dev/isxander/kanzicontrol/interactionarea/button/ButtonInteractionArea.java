@@ -11,19 +11,13 @@ public class ButtonInteractionArea implements PositionableElement {
     private final ButtonRenderer renderer;
     private final Vector2f position;
     private final Vector2fc size;
-    private final Consumer<Boolean> fingerDownListener;
+    private final ButtonAction action;
 
-    public ButtonInteractionArea(ButtonRenderer renderer, float width, float height, Consumer<Boolean> fingerDownListener) {
+    public ButtonInteractionArea(ButtonRenderer renderer, float width, float height, ButtonAction action) {
         this.renderer = renderer;
         this.position = new Vector2f();
         this.size = new Vector2f(width, height);
-        this.fingerDownListener = fingerDownListener;
-    }
-
-    public ButtonInteractionArea(ButtonRenderer renderer, float width, float height, Runnable onTap) {
-        this(renderer, width, height, fingerDown -> {
-            if (!fingerDown) onTap.run();
-        });
+        this.action = action;
     }
 
     @Override
@@ -43,12 +37,12 @@ public class ButtonInteractionArea implements PositionableElement {
 
     @Override
     public void fingerDown(Vector2fc position) {
-        this.fingerDownListener.accept(true);
+        this.action.onFingerStateChange(true);
     }
 
     @Override
     public void fingerUp(Vector2fc position) {
-        this.fingerDownListener.accept(false);
+        this.action.onFingerStateChange(false);
     }
 
     @Override

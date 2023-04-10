@@ -8,6 +8,7 @@ fabric_loader = "0.14.19"
 fabric_api = "0.76.0+1.19.4"
 yet_another_config_lib = "2.4.0"
 mixin_extras = "0.2.0-beta.6"
+quilt_json5 = "1.0.3"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
@@ -15,6 +16,7 @@ fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_l
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 yet_another_config_lib = { module = "dev.isxander:yet-another-config-lib", version.ref = "yet_another_config_lib" }
 mixin_extras = { module = "com.github.llamalad7:mixinextras", version.ref = "mixin_extras" }
+quilt_json5 = { module = "org.quiltmc:quilt-json5", version.ref = "quilt_json5" }
 
 [plugins]
 loom = { id = "fabric-loom", version.ref = "loom" }

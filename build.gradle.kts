@@ -12,6 +12,7 @@ repositories {
     mavenCentral()
     maven("https://maven.isxander.dev/releases")
     maven("https://jitpack.io")
+    maven("https://maven.quiltmc.org/repository/release")
 }
 
 val minecraftVersion = libs.versions.minecraft.get()
@@ -31,6 +32,11 @@ dependencies {
         implementation(it)
         include(it)
         annotationProcessor(it)
+    }
+
+    libs.quilt.json5.let {
+        implementation(it)
+        include(it)
     }
 }
 
