@@ -2,8 +2,8 @@
 // - Possible elements are: row, column, button
 // - keys can be repeated - ignore editor warnings,
 // - window anchor and origin have possible values: TOP_LEFT, TOP_CENTER, TOP_RIGHT, CENTER_LEFT, CENTER, CENTER_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
-// - button renderers have possible types: lexigram, empty color
-//   - extra lexigrams cannot be added
+// - button renderers have possible types: lexigram, empty, color
+//   - extra lexigrams can be added by creating a resource pack and placing lexigrams in path `assets/kanzicontrol/textures/lexigrams/<lexigramid>.png`
 //   - color renderers expect colors in format ARGB
 // - buttons cannot be positioned outside of rows or columns
 

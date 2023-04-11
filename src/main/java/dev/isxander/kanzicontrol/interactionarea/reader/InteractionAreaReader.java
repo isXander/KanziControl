@@ -222,7 +222,7 @@ public class InteractionAreaReader {
 
             switch (name) {
                 case "lexigram" -> {
-                    return Lexigrams.ALL.get(reader.nextString());
+                    return new LexigramRenderer(reader.nextString());
                 }
                 default -> reader.skipValue();
             }

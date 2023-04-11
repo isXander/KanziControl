@@ -10,7 +10,7 @@ public class LexigramRenderer implements ButtonRenderer {
 
     private final ResourceLocation textureLocation;
 
-    LexigramRenderer(String lexigramId) {
+    public LexigramRenderer(String lexigramId) {
         this.textureLocation = new ResourceLocation("kanzicontrol", "textures/lexigrams/" + lexigramId + ".png");
     }
 

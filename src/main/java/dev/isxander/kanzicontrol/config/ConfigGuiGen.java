@@ -4,20 +4,20 @@ import dev.isxander.yacl.api.ConfigCategory;
 import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionGroup;
 import dev.isxander.yacl.api.YetAnotherConfigLib;
+import dev.isxander.yacl.gui.controllers.BooleanController;
 import dev.isxander.yacl.gui.controllers.ColorController;
+import dev.isxander.yacl.gui.controllers.TickBoxController;
 import dev.isxander.yacl.gui.controllers.slider.FloatSliderController;
 import dev.isxander.yacl.gui.controllers.slider.IntegerSliderController;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
 import java.awt.*;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.function.Function;
 
 public class ConfigGuiGen {
     public static Screen generateConfigScreen(Screen parent) {
-        return YetAnotherConfigLib.create(KanziConfig.INSTANCE, (cfg, def, builder) -> {
+        return YetAnotherConfigLib.create(KanziConfig.INSTANCE, (def, cfg, builder) -> {
             Function<Integer, Component> degreesFormat = f -> Component.literal(f + "°");
             Function<Integer, Component> degreesPerSecondFormat = f -> Component.literal(f + "°/s");
 
@@ -61,6 +61,30 @@ public class ConfigGuiGen {
                                             .tooltip(Component.literal("The color of the overlay that appears when walking forward."))
                                             .binding(new Color(def.forwardOverlayColor, true), () -> new Color(cfg.forwardOverlayColor, true), v -> cfg.forwardOverlayColor = v.getRGB())
                                             .controller(opt -> new ColorController(opt, true))
+                                            .build())
+                                    .build())
+                            .build())
+                    .category(ConfigCategory.createBuilder()
+                            .name(Component.literal("Rendering"))
+                            .group(OptionGroup.createBuilder()
+                                    .name(Component.literal("Block Overlay"))
+                                    .option(Option.createBuilder(boolean.class)
+                                            .name(Component.literal("Use custom block highlight"))
+                                            .tooltip(Component.literal("Renders a full box over the top of the crosshair hovered block, to make it more clear of the block that a bonobo can interact with."))
+                                            .binding(def.useEnhancedBlockHighlight, () -> cfg.useEnhancedBlockHighlight, v -> cfg.useEnhancedBlockHighlight = v)
+                                            .controller(TickBoxController::new)
+                                            .build())
+                                    .option(Option.createBuilder(Color.class)
+                                            .name(Component.literal("Block highlight color"))
+                                            .tooltip(Component.literal("Color of the box if 'Use custom block highlight' option is enabled."))
+                                            .binding(new Color(def.blockHighlightColor, true), () -> new Color(cfg.blockHighlightColor, true), v -> cfg.blockHighlightColor = v.getRGB())
+                                            .controller(opt -> new ColorController(opt, true))
+                                            .build())
+                                    .option(Option.createBuilder(boolean.class)
+                                            .name(Component.literal("Ignore depth test"))
+                                            .tooltip(Component.literal("Renders the block highlight with no occlusion from other blocks or itself."))
+                                            .binding(def.ignoreBlockHighlightDepth, () -> cfg.ignoreBlockHighlightDepth, v -> cfg.ignoreBlockHighlightDepth = v)
+                                            .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, false))
                                             .build())
                                     .build())
                             .build());
