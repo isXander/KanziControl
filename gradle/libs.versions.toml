@@ -15,7 +15,7 @@ minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
 yet_another_config_lib = { module = "dev.isxander:yet-another-config-lib", version.ref = "yet_another_config_lib" }
-mixin_extras = { module = "com.github.llamalad7:mixinextras", version.ref = "mixin_extras" }
+mixin_extras = { module = "com.github.llamalad7.mixinextras:mixinextras-fabric", version.ref = "mixin_extras" }
 quilt_json5 = { module = "org.quiltmc:quilt-json5", version.ref = "quilt_json5" }
 
 [plugins]

@@ -11,6 +11,9 @@ import org.joml.Vector2fc;
 public class TouchWalk implements InteractionArea {
     @Override
     public boolean isInBounds(Vector2fc position) {
+        if (KanziConfig.INSTANCE.getConfig().disableForwardOverlay)
+            return false;
+
         Vector2fc windowSize = windowSize();
 
         float deadRadius = Math.min(windowSize.x(), windowSize.y())
@@ -30,6 +33,9 @@ public class TouchWalk implements InteractionArea {
 
     @Override
     public void render(PoseStack stack, float deltaTime, Vector2fc position, boolean interacting) {
+        if (KanziConfig.INSTANCE.getConfig().disableForwardOverlay)
+            return;
+
         Vector2fc windowSize = windowSize();
 
         DebugRendering.fillCircle(

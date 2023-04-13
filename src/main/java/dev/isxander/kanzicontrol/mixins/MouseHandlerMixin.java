@@ -2,6 +2,7 @@ package dev.isxander.kanzicontrol.mixins;
 
 import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.platform.InputConstants;
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.debug.KanziControlDebug;
 import dev.isxander.kanzicontrol.interactionarea.InteractionAreaStorage;
 import net.minecraft.client.Minecraft;
@@ -30,6 +31,10 @@ public class MouseHandlerMixin {
      */
     @ModifyArg(method = "grabMouse", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/InputConstants;grabOrReleaseMouse(JIDD)V"))
     private int changeMouseState(int disabledState) {
+        if (!KanziConfig.INSTANCE.getConfig().enabled) {
+            return disabledState;
+        }
+
         return KanziControlDebug.DEBUG_MOUSE_POSITION ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN;
     }
 
@@ -37,8 +42,14 @@ public class MouseHandlerMixin {
      * @author
      * @reason
      */
-    @Overwrite
-    public void onPress(long window, int button, int action, int mods) {
+    @Inject(method = "onPress", at = @At("HEAD"), cancellable = true)
+    public void overridePress(long window, int button, int action, int modifiers, CallbackInfo ci) {
+        if (!KanziConfig.INSTANCE.getConfig().enabled) {
+            return;
+        }
+
+        ci.cancel();
+
         if (window != minecraft.getWindow().getWindow())
             return;
 
@@ -73,15 +84,13 @@ public class MouseHandlerMixin {
 
     @Inject(method = "onMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;turnPlayer()V"))
     private void onProcessMouseMove(long window, double x, double y, CallbackInfo ci) {
-        InteractionAreaStorage.onMouseMove((float) x, (float) y);
+        if (KanziConfig.INSTANCE.getConfig().enabled)
+            InteractionAreaStorage.onMouseMove((float) x, (float) y);
     }
 
-    /**
-     * @author
-     * @reason
-     */
-    @Overwrite
-    public void turnPlayer() {
-
+    @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
+    public void stopTurningPlayer(CallbackInfo ci) {
+        if (KanziConfig.INSTANCE.getConfig().enabled)
+            ci.cancel();
     }
 }

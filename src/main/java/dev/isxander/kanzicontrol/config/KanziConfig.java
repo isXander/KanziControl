@@ -13,14 +13,19 @@ public class KanziConfig {
                     .overrideGsonBuilder(new GsonBuilder().setPrettyPrinting())
                     .build();
 
+    @ConfigEntry public boolean enabled = true;
+
     @ConfigEntry public int touchLookDegreesPerTap = 30;
     @ConfigEntry public int touchLookDegreesPerSecond = 90;
 
     @ConfigEntry public float touchForwardRadius = 0.33f;
     @ConfigEntry public float walkForwardDuration = 1f;
     @ConfigEntry public int forwardOverlayColor = 0x50FFFFFF;
+    @ConfigEntry public boolean disableForwardOverlay = false;
 
     @ConfigEntry public boolean useEnhancedBlockHighlight = true;
     @ConfigEntry public int blockHighlightColor = 0x66FFFFFF;
     @ConfigEntry public boolean ignoreBlockHighlightDepth = false;
+
+    @ConfigEntry public boolean speechEnabled = true;
 }

@@ -3,6 +3,7 @@
 // - keys can be repeated - ignore editor warnings,
 // - window anchor and origin have possible values: TOP_LEFT, TOP_CENTER, TOP_RIGHT, CENTER_LEFT, CENTER, CENTER_RIGHT, BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
 // - button renderers have possible types: lexigram, empty, color
+// - button actions have possible values: jump, break, fight, use, swim_down, hotbar_slot_1-9 and special action to run command (make sure it begins with /)
 //   - extra lexigrams can be added by creating a resource pack and placing lexigrams in path `assets/kanzicontrol/textures/lexigrams/<lexigramid>.png`
 //   - color renderers expect colors in format ARGB
 // - buttons cannot be positioned outside of rows or columns
@@ -40,16 +41,16 @@
       },
       "button": {
         "renderer": {
-          "type": "color",
-          "color": 0xFF00FF00
+          "type": "lexigram",
+          "lexigram": "use"
         },
         "size": [30.0, 30.0],
         "action": "use"
       },
       "button": {
         "renderer": {
-          "type": "color",
-          "color": 0xFF0000FF
+          "type": "lexigram",
+          "lexigram": "swim"
         },
         "size": [30.0, 30.0],
         "action": "swim_down"

@@ -11,11 +11,11 @@ public class ButtonActions {
 
     public static final ButtonAction
             NONE = action("none", ButtonAction.none()),
-            JUMP = action("jump", ButtonAction.down(TouchInput.INSTANCE::jump)),
-            FIGHT = action("fight", ButtonAction.down(TouchInput.INSTANCE::attack)),
-            BREAK = action("break", ButtonAction.down(TouchInput.INSTANCE::toggleMining)),
-            USE = action("use", ButtonAction.down(TouchInput.INSTANCE::toggleUseItem)),
-            TOGGLE_SWIM_DOWN = action("swim_down", ButtonAction.down(TouchInput.INSTANCE::toggleSwimDown)),
+            JUMP = action("jump", ButtonAction.down(TouchInput.INSTANCE::jump).withNarration("jump")),
+            FIGHT = action("fight", ButtonAction.down(TouchInput.INSTANCE::attack).withNarration("fight")),
+            BREAK = action("break", ButtonAction.down(TouchInput.INSTANCE::toggleMining).withNarration("break")),
+            USE = action("use", ButtonAction.down(TouchInput.INSTANCE::toggleUseItem).withNarration("use")),
+            TOGGLE_SWIM_DOWN = action("swim_down", ButtonAction.down(TouchInput.INSTANCE::toggleSwimDown).withNarration(() -> TouchInput.INSTANCE.swimDown ? "sink" : "swim up")),
             HOTBAR_SLOT_1 = action("hotbar_slot_1", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 0)),
             HOTBAR_SLOT_2 = action("hotbar_slot_2", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 1)),
             HOTBAR_SLOT_3 = action("hotbar_slot_3", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 2)),
@@ -26,8 +26,19 @@ public class ButtonActions {
             HOTBAR_SLOT_8 = action("hotbar_slot_8", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 7)),
             HOTBAR_SLOT_9 = action("hotbar_slot_9", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 8));
 
+    public static ButtonAction command(String command) {
+        if (command.startsWith("/"))
+            command = command.substring(1);
+        String finalCommand = command;
+        return ButtonAction.down(() -> Minecraft.getInstance().player.connection.sendCommand(finalCommand));
+    }
+
     private static ButtonAction action(String actionId, ButtonAction action) {
         ACTIONS.put(actionId, action);
         return action;
+    }
+
+    private static void say(String message) {
+        Minecraft.getInstance().getNarrator().sayNow(message);
     }
 }

@@ -1,7 +1,9 @@
 package dev.isxander.kanzicontrol.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.interactionarea.InteractionAreaStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -18,6 +20,12 @@ public class GameRendererMixin {
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", ordinal = 0))
     private void onPostRenderHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci, @Local(ordinal = 1) PoseStack poseStack) {
-        InteractionAreaStorage.render(poseStack, minecraft.getDeltaFrameTime());
+        if (KanziConfig.INSTANCE.getConfig().enabled)
+            InteractionAreaStorage.render(poseStack, minecraft.getDeltaFrameTime());
+    }
+
+    @ModifyReturnValue(method = "shouldRenderBlockOutline", at = @At("RETURN"))
+    private boolean modifyShouldRenderBlockOutline(boolean original) {
+        return original || KanziConfig.INSTANCE.getConfig().enabled;
     }
 }

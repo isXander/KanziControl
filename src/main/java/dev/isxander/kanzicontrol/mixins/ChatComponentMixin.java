@@ -1,6 +1,7 @@
 package dev.isxander.kanzicontrol.mixins;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.ChatComponent;
 import net.minecraft.client.gui.screens.ChatScreen;
@@ -15,6 +16,6 @@ public class ChatComponentMixin {
 
     @ModifyReturnValue(method = "isChatHidden", at = @At("RETURN"))
     private boolean modifyChatHidden(boolean original) {
-        return original || !(minecraft.screen instanceof ChatScreen);
+        return original || (!(minecraft.screen instanceof ChatScreen) && KanziConfig.INSTANCE.getConfig().enabled);
     }
 }

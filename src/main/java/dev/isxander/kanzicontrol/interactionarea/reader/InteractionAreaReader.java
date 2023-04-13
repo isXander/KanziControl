@@ -111,7 +111,7 @@ public class InteractionAreaReader {
         AnchorPoint origin = null;
         float x = 0, y = 0;
         float elementPadding = 0;
-        ColumnInteractionArea.ElementPosition elementPosition = null;
+        ColumnInteractionArea.ElementPosition elementPosition = ColumnInteractionArea.ElementPosition.LEFT;
         float columnPaddingLeft = 0, columnPaddingRight = 0, columnPaddingTop = 0, columnPaddingBottom = 0;
 
         reader.beginObject();
@@ -185,7 +185,14 @@ public class InteractionAreaReader {
                     reader.endArray();
                 }
                 case "renderer" -> renderer = readButtonRenderer(reader);
-                case "action" -> action = ButtonActions.ACTIONS.get(reader.nextString());
+                case "action" -> {
+                    String actionString = reader.nextString();
+                    if (actionString.startsWith("/")) {
+                        action = ButtonActions.command(actionString);
+                    } else {
+                        action = ButtonActions.ACTIONS.get(actionString);
+                    }
+                }
                 default -> reader.skipValue();
             }
         }

@@ -3,6 +3,7 @@ package dev.isxander.kanzicontrol;
 import dev.isxander.kanzicontrol.mixins.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.Input;
+import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.BlockHitResult;
@@ -16,7 +17,7 @@ public class TouchInput extends Input {
     private boolean isMining = false;
 
     private int jumpTimer = 0;
-    private boolean swimDown = false;
+    public boolean swimDown = false;
 
     @Override
     public void tick(boolean slowDown, float movementMultiplier) {
@@ -141,5 +142,14 @@ public class TouchInput extends Input {
 
     private LocalPlayer getPlayer() {
         return Minecraft.getInstance().player;
+    }
+
+    public void setEnabled(boolean enabled, LocalPlayer player) {
+        if (player == null) return;
+        if (enabled) {
+            player.input = TouchInput.INSTANCE;
+        } else {
+            player.input = new KeyboardInput(Minecraft.getInstance().options);
+        }
     }
 }

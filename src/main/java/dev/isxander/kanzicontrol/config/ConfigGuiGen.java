@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.config;
 
+import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.yacl.api.ConfigCategory;
 import dev.isxander.yacl.api.Option;
 import dev.isxander.yacl.api.OptionGroup;
@@ -9,6 +10,7 @@ import dev.isxander.yacl.gui.controllers.ColorController;
 import dev.isxander.yacl.gui.controllers.TickBoxController;
 import dev.isxander.yacl.gui.controllers.slider.FloatSliderController;
 import dev.isxander.yacl.gui.controllers.slider.IntegerSliderController;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
@@ -62,6 +64,12 @@ public class ConfigGuiGen {
                                             .binding(new Color(def.forwardOverlayColor, true), () -> new Color(cfg.forwardOverlayColor, true), v -> cfg.forwardOverlayColor = v.getRGB())
                                             .controller(opt -> new ColorController(opt, true))
                                             .build())
+                                    .option(Option.createBuilder(boolean.class)
+                                            .name(Component.literal("Disable forward button"))
+                                            .tooltip(Component.literal("Completely disabled the forward button."))
+                                            .binding(def.disableForwardOverlay, () -> cfg.disableForwardOverlay, v -> cfg.disableForwardOverlay = v)
+                                            .controller(TickBoxController::new)
+                                            .build())
                                     .build())
                             .build())
                     .category(ConfigCategory.createBuilder()
@@ -86,6 +94,20 @@ public class ConfigGuiGen {
                                             .binding(def.ignoreBlockHighlightDepth, () -> cfg.ignoreBlockHighlightDepth, v -> cfg.ignoreBlockHighlightDepth = v)
                                             .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, false))
                                             .build())
+                                    .build())
+                            .build())
+                    .category(ConfigCategory.createBuilder()
+                            .name(Component.literal("Miscellaneous"))
+                            .option(Option.createBuilder(boolean.class)
+                                    .name(Component.literal("Mod enabled"))
+                                    .binding(def.enabled, () -> cfg.enabled, v -> cfg.enabled = v)
+                                    .controller(TickBoxController::new)
+                                    .listener((opt, value) -> TouchInput.INSTANCE.setEnabled(value, Minecraft.getInstance().player))
+                                    .build())
+                            .option(Option.createBuilder(boolean.class)
+                                    .name(Component.literal("Speech enabled"))
+                                    .binding(def.speechEnabled, () -> cfg.speechEnabled, v -> cfg.speechEnabled = v)
+                                    .controller(TickBoxController::new)
                                     .build())
                             .build());
         }).generateScreen(parent);
