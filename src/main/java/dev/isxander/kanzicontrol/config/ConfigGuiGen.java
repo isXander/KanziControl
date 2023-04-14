@@ -22,6 +22,7 @@ public class ConfigGuiGen {
         return YetAnotherConfigLib.create(KanziConfig.INSTANCE, (def, cfg, builder) -> {
             Function<Integer, Component> degreesFormat = f -> Component.literal(f + "°");
             Function<Integer, Component> degreesPerSecondFormat = f -> Component.literal(f + "°/s");
+            Function<Float, Component> secondsFormat = f -> Component.literal(String.format("%.1f", f) + " sec(s)");
 
             return builder
                     .title(Component.literal("Kanzi Control"))
@@ -42,6 +43,19 @@ public class ConfigGuiGen {
                                             .binding(def.touchLookDegreesPerSecond, () -> cfg.touchLookDegreesPerSecond, v -> cfg.touchLookDegreesPerSecond = v)
                                             .controller(opt -> new IntegerSliderController(opt, 5, 360, 5, degreesPerSecondFormat))
                                             .build())
+                                    .option(Option.createBuilder(float.class)
+                                            .name(Component.literal("Vertical reset delay"))
+                                            .tooltip(Component.literal("The amount of time to wait before resetting the vertical rotation to 0."))
+                                            .binding(def.verticalResetDelay, () -> cfg.verticalResetDelay, v -> cfg.verticalResetDelay = v)
+                                            .controller(opt -> new FloatSliderController(opt, 0.5f, 10f, 0.5f, secondsFormat))
+                                            .build())
+                                    .option(Option.createBuilder(int.class)
+                                            .name(Component.literal("Max/min vertical degrees"))
+                                            .tooltip(Component.literal("The maximum and minimum vertical degrees a bonobo can look up and down."))
+                                            .tooltip(Component.literal("Setting to 0 will completely prevent vertical rotation, setting to 90 will completely unlock vertical rotation."))
+                                            .binding(def.maxMinVerticalDegrees, () -> cfg.maxMinVerticalDegrees, v -> cfg.maxMinVerticalDegrees = v)
+                                            .controller(opt -> new IntegerSliderController(opt, 0, 90, 5, degreesFormat))
+                                            .build())
                                     .build())
                             .group(OptionGroup.createBuilder()
                                     .name(Component.literal("Walking"))
@@ -56,7 +70,7 @@ public class ConfigGuiGen {
                                             .name(Component.literal("Walk forward duration"))
                                             .tooltip(Component.literal("The amount of time to walk forward per tap."))
                                             .binding(def.walkForwardDuration, () -> cfg.walkForwardDuration, v -> cfg.walkForwardDuration = v)
-                                            .controller(opt -> new FloatSliderController(opt, 0.1f, 5f, 0.1f, f -> Component.literal(String.format("%.1f", f) + " sec(s)")))
+                                            .controller(opt -> new FloatSliderController(opt, 0.1f, 5f, 0.1f, secondsFormat))
                                             .build())
                                     .option(Option.createBuilder(Color.class)
                                             .name(Component.literal("Forward overlay color"))

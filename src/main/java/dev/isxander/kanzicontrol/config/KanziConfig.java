@@ -17,6 +17,8 @@ public class KanziConfig {
 
     @ConfigEntry public int touchLookDegreesPerTap = 30;
     @ConfigEntry public int touchLookDegreesPerSecond = 90;
+    @ConfigEntry public float verticalResetDelay = 3f;
+    @ConfigEntry public int maxMinVerticalDegrees = 60;
 
     @ConfigEntry public float touchForwardRadius = 0.33f;
     @ConfigEntry public float walkForwardDuration = 1f;

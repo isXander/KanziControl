@@ -4,12 +4,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.interactionarea.InteractionArea;
+import dev.isxander.kanzicontrol.utils.TickTaskScheduler;
+import net.minecraft.client.player.LocalPlayer;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
 
 public class TouchLook implements InteractionArea {
     private final Vector2f lookDirection = new Vector2f();
     private float degreesRemaining;
+    private TickTaskScheduler.Task resetTask = null;
 
     @Override
     public boolean isInBounds(Vector2fc position) {
@@ -24,17 +27,13 @@ public class TouchLook implements InteractionArea {
 
     @Override
     public void fingerDown(Vector2fc position) {
+        if (resetTask != null)
+            resetTask.cancel();
+
+        degreesRemaining = KanziConfig.INSTANCE.getConfig().touchLookDegreesPerTap;
+        TouchInput.INSTANCE.cancelMining();
+
         Vector2f distFromCenter = distFromCenter(position);
-
-//        // clamp dist from center to smallest window dimension to make comparison fair
-//        var maxDist = Math.min(windowSize().x(), windowSize().y()) * 0.5f;
-//        distFromCenter.set(
-//                Math.min(Math.abs(distFromCenter.x()), maxDist) * Math.copySign(1f, distFromCenter.x()),
-//                Math.min(Math.abs(distFromCenter.y()), maxDist) * Math.copySign(1f, distFromCenter.y())
-//        );
-//        System.out.println(distFromCenter.toString(NumberFormat.getInstance()));
-
-        // calculate angle of touch from center
         double touchAngle = Math.atan2(distFromCenter.y(), distFromCenter.x());
         Vector2f freeLookDirection = new Vector2f((float) Math.cos(touchAngle), (float) Math.sin(touchAngle));
         int maxComponent = freeLookDirection.maxComponent();
@@ -44,10 +43,23 @@ public class TouchLook implements InteractionArea {
         } else {
             // y is max component
             lookDirection.set(0, Math.signum(freeLookDirection.y()));
-        }
 
-        degreesRemaining = KanziConfig.INSTANCE.getConfig().touchLookDegreesPerTap;
-        TouchInput.INSTANCE.cancelMining();
+            LocalPlayer player = minecraft().player;
+            resetTask = TickTaskScheduler.INSTANCE.schedule((int)(KanziConfig.INSTANCE.getConfig().verticalResetDelay * 20), client -> {
+                if (player != null) {
+                    lookDirection.set(0, -Math.signum(player.getXRot()));
+                    degreesRemaining = Math.abs(player.getXRot());
+                }
+            });
+
+            var pitch = player.getXRot();
+            var rotation = degreesRemaining * Math.signum(lookDirection.y());
+            var maxPitch = KanziConfig.INSTANCE.getConfig().maxMinVerticalDegrees;
+            if (pitch + rotation > maxPitch)
+                degreesRemaining = maxPitch - pitch;
+            else if (pitch + rotation < -maxPitch)
+                degreesRemaining = -maxPitch - pitch;
+        }
     }
 
     @Override
