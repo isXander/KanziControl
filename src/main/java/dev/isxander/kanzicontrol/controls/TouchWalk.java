@@ -25,9 +25,7 @@ public class TouchWalk implements InteractionArea {
 
     @Override
     public void fingerDown(Vector2fc position) {
-        if (TouchInput.INSTANCE.isMovingForward())
-            TouchInput.INSTANCE.setForward(0);
-        else
+        if (!TouchInput.INSTANCE.isMovingForward())
             TouchInput.INSTANCE.setForward((int) (KanziConfig.INSTANCE.getConfig().walkForwardDuration / 0.05f));
     }
 

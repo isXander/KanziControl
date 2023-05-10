@@ -1,10 +1,8 @@
 package dev.isxander.kanzicontrol.config;
 
 import dev.isxander.kanzicontrol.TouchInput;
-import dev.isxander.yacl.api.ConfigCategory;
-import dev.isxander.yacl.api.Option;
-import dev.isxander.yacl.api.OptionGroup;
-import dev.isxander.yacl.api.YetAnotherConfigLib;
+import dev.isxander.kanzicontrol.interactionarea.InteractionAreaStorage;
+import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.gui.controllers.BooleanController;
 import dev.isxander.yacl.gui.controllers.ColorController;
 import dev.isxander.yacl.gui.controllers.TickBoxController;
@@ -18,6 +16,8 @@ import java.awt.*;
 import java.util.function.Function;
 
 public class ConfigGuiGen {
+    private static final OptionFlag REGEN_CONFIG_FLAG = mc -> InteractionAreaStorage.regen();
+
     public static Screen generateConfigScreen(Screen parent) {
         return YetAnotherConfigLib.create(KanziConfig.INSTANCE, (def, cfg, builder) -> {
             Function<Integer, Component> degreesFormat = f -> Component.literal(f + "°");
@@ -88,6 +88,12 @@ public class ConfigGuiGen {
                             .build())
                     .category(ConfigCategory.createBuilder()
                             .name(Component.literal("Rendering"))
+                            .option(Option.createBuilder(boolean.class)
+                                    .name(Component.literal("Show cursor"))
+                                    .tooltip(Component.literal("Shows the system cursor whilst in-game."))
+                                    .binding(def.showCursor, () -> cfg.showCursor, v -> cfg.showCursor = v)
+                                    .controller(TickBoxController::new)
+                                    .build())
                             .group(OptionGroup.createBuilder()
                                     .name(Component.literal("Block Overlay"))
                                     .option(Option.createBuilder(boolean.class)
@@ -108,6 +114,20 @@ public class ConfigGuiGen {
                                             .binding(def.ignoreBlockHighlightDepth, () -> cfg.ignoreBlockHighlightDepth, v -> cfg.ignoreBlockHighlightDepth = v)
                                             .controller(opt -> new BooleanController(opt, BooleanController.YES_NO_FORMATTER, false))
                                             .build())
+                                    .build())
+                            .group(OptionGroup.createBuilder()
+                                    .name(Component.literal("Button Toggles"))
+                                    .options(cfg.enabledButtons.entrySet().stream()
+                                            .map(entry -> {
+                                                var toggleName = entry.getKey();
+                                                return Option.createBuilder(boolean.class)
+                                                        .name(Component.literal(toggleName))
+                                                        .tooltip(Component.literal("If '" + toggleName + "' is rendered."))
+                                                        .binding(true, entry::getValue, v -> cfg.enabledButtons.put(toggleName, v))
+                                                        .controller(TickBoxController::new)
+                                                        .flag(REGEN_CONFIG_FLAG)
+                                                        .build();
+                                            }).toList())
                                     .build())
                             .build())
                     .category(ConfigCategory.createBuilder()

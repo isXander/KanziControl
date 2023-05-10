@@ -1,6 +1,7 @@
 package dev.isxander.kanzicontrol.interactionarea.reader;
 
 import dev.isxander.kanzicontrol.KanziControl;
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.interactionarea.*;
 import dev.isxander.kanzicontrol.interactionarea.button.*;
 import org.quiltmc.json5.JsonReader;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class InteractionAreaReader {
     public static List<InteractionArea> readChildren(JsonReader reader) throws IOException {
@@ -22,7 +24,7 @@ public class InteractionAreaReader {
             switch (name) {
                 case "row" -> children.add(readRow(reader));
                 case "column" -> children.add(readColumn(reader));
-                case "button" -> children.add(readButton(reader));
+                case "button" -> readButton(reader).ifPresent(children::add);
                 default -> reader.skipValue();
             }
         }
@@ -165,13 +167,15 @@ public class InteractionAreaReader {
                 .build();
     }
 
-    public static ButtonInteractionArea readButton(JsonReader reader) throws IOException {
+    public static Optional<ButtonInteractionArea> readButton(JsonReader reader) throws IOException {
         AnchorPoint windowAnchor = null;
         AnchorPoint origin = null;
         float x = 0, y = 0;
         float width = 0, height = 0;
         ButtonRenderer renderer = null;
         ButtonAction action = null;
+        ButtonRenderPredicate renderPredicate = ButtonRenderPredicates.ALWAYS;
+        String toggleName = null;
 
         reader.beginObject();
         while (reader.hasNext()) {
@@ -193,12 +197,24 @@ public class InteractionAreaReader {
                         action = ButtonActions.ACTIONS.get(actionString);
                     }
                 }
+                case "predicate" -> {
+                    String predicateString = reader.nextString();
+                    renderPredicate = ButtonRenderPredicates.ALL.get(predicateString);
+                }
+                case "toggleable" -> toggleName = reader.nextString();
                 default -> reader.skipValue();
             }
         }
         reader.endObject();
 
-        return new ButtonInteractionArea(renderer, width, height, action);
+        if (toggleName != null) {
+            var enabled = KanziConfig.INSTANCE.getConfig().enabledButtons.computeIfAbsent(toggleName, s -> true);
+            if (!enabled) {
+                return Optional.empty();
+            }
+        }
+
+        return Optional.of(new ButtonInteractionArea(renderer, width, height, action, renderPredicate));
     }
 
     public static ButtonRenderer readButtonRenderer(JsonReader reader) throws IOException {

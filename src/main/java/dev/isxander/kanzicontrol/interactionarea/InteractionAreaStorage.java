@@ -1,6 +1,8 @@
 package dev.isxander.kanzicontrol.interactionarea;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import dev.isxander.kanzicontrol.KanziControl;
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.controls.TouchLook;
 import dev.isxander.kanzicontrol.controls.TouchWalk;
 import dev.isxander.kanzicontrol.interactionarea.reader.InteractionAreaReader;
@@ -8,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import org.joml.Vector2fc;
 import org.quiltmc.json5.JsonReader;
+import org.quiltmc.json5.JsonToken;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -74,6 +77,7 @@ public class InteractionAreaStorage extends AbstractInteractionAreaContainer<Int
             for (var area : InteractionAreaReader.readChildren(reader)) {
                 insertTop(area);
             }
+            KanziConfig.INSTANCE.save();
         } catch (IOException e) {
             e.printStackTrace();
         }

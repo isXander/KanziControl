@@ -11,11 +11,11 @@ public class ButtonActions {
 
     public static final ButtonAction
             NONE = action("none", ButtonAction.none()),
-            JUMP = action("jump", ButtonAction.down(TouchInput.INSTANCE::jump).withNarration("jump")),
-            FIGHT = action("fight", ButtonAction.down(TouchInput.INSTANCE::attack).withNarration("fight")),
-            BREAK = action("break", ButtonAction.down(TouchInput.INSTANCE::toggleMining).withNarration("break")),
-            USE = action("use", ButtonAction.down(TouchInput.INSTANCE::toggleUseItem).withNarration("use")),
-            TOGGLE_SWIM_DOWN = action("swim_down", ButtonAction.down(TouchInput.INSTANCE::toggleSwimDown).withNarration(() -> TouchInput.INSTANCE.swimDown ? "sink" : "swim up")),
+            JUMP = action("jump", ButtonAction.down(TouchInput.INSTANCE::jump).withNarration("jump").cooldown(1000)),
+            FIGHT = action("fight", ButtonAction.down(TouchInput.INSTANCE::attack).withNarration("fight").cooldown(1000)),
+            BREAK = action("break", ButtonAction.down(TouchInput.INSTANCE::tryStartMining).withNarration("break").cooldown(1000)),
+            USE = action("use", ButtonAction.down(TouchInput.INSTANCE::toggleUseItem).withNarration("use").cooldown(1000)),
+            TOGGLE_SWIM_DOWN = action("swim_down", ButtonAction.down(TouchInput.INSTANCE::toggleSwimDown).withNarration(() -> TouchInput.INSTANCE.swimDown ? "sink" : "swim up").cooldown(1000)),
             HOTBAR_SLOT_1 = action("hotbar_slot_1", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 0)),
             HOTBAR_SLOT_2 = action("hotbar_slot_2", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 1)),
             HOTBAR_SLOT_3 = action("hotbar_slot_3", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 2)),

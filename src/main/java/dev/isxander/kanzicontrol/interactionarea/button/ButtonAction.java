@@ -11,6 +11,20 @@ import java.util.function.Supplier;
 public interface ButtonAction {
     void onFingerStateChange(boolean fingerDown);
 
+    default ButtonAction cooldown(int cooldown) {
+        return new ButtonAction() {
+            private long lastTime = 0;
+
+            @Override
+            public void onFingerStateChange(boolean fingerDown) {
+                if (System.currentTimeMillis() - lastTime > cooldown) {
+                    lastTime = System.currentTimeMillis();
+                    ButtonAction.this.onFingerStateChange(fingerDown);
+                }
+            }
+        };
+    }
+
     default ButtonAction withNarration(Supplier<String> message) {
         return (fingerDown) -> {
             this.onFingerStateChange(fingerDown);

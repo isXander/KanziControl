@@ -12,12 +12,14 @@ public class ButtonInteractionArea implements PositionableElement {
     private final Vector2f position;
     private final Vector2fc size;
     private final ButtonAction action;
+    private final ButtonRenderPredicate predicate;
 
-    public ButtonInteractionArea(ButtonRenderer renderer, float width, float height, ButtonAction action) {
+    public ButtonInteractionArea(ButtonRenderer renderer, float width, float height, ButtonAction action, ButtonRenderPredicate predicate) {
         this.renderer = renderer;
         this.position = new Vector2f();
         this.size = new Vector2f(width, height);
         this.action = action;
+        this.predicate = predicate;
     }
 
     @Override
@@ -47,7 +49,17 @@ public class ButtonInteractionArea implements PositionableElement {
 
     @Override
     public void render(PoseStack stack, float deltaTime, Vector2fc position, boolean interacting) {
-        this.renderer.render(stack, deltaTime, this, interacting);
+        if (this.canRender()) {
+            this.renderer.render(stack, deltaTime, this, interacting);
+        }
     }
 
+    @Override
+    public boolean isInBounds(Vector2fc position) {
+        return PositionableElement.super.isInBounds(position) && this.canRender();
+    }
+
+    public boolean canRender() {
+        return this.predicate.test(new ButtonRenderPredicate.RenderCtx(minecraft().hitResult, false));
+    }
 }

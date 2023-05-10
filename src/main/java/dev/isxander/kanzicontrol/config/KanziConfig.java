@@ -6,6 +6,10 @@ import dev.isxander.yacl.config.ConfigInstance;
 import dev.isxander.yacl.config.GsonConfigInstance;
 import net.fabricmc.loader.api.FabricLoader;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class KanziConfig {
     public static final ConfigInstance<KanziConfig> INSTANCE =
             GsonConfigInstance.createBuilder(KanziConfig.class)
@@ -28,6 +32,9 @@ public class KanziConfig {
     @ConfigEntry public boolean useEnhancedBlockHighlight = true;
     @ConfigEntry public int blockHighlightColor = 0x66FFFFFF;
     @ConfigEntry public boolean ignoreBlockHighlightDepth = false;
+    @ConfigEntry public boolean showCursor = true;
+
+    @ConfigEntry public Map<String, Boolean> enabledButtons = new LinkedHashMap<>();
 
     @ConfigEntry public boolean speechEnabled = true;
 }

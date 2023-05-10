@@ -99,11 +99,10 @@ public class TouchInput extends Input {
         }
     }
 
-    public void toggleMining() {
+    public void tryStartMining() {
         var minecraft = Minecraft.getInstance();
 
         if (isMining) {
-            cancelMining();
             return;
         }
 

@@ -35,7 +35,7 @@ public class MouseHandlerMixin {
             return disabledState;
         }
 
-        return KanziControlDebug.DEBUG_MOUSE_POSITION ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN;
+        return KanziConfig.INSTANCE.getConfig().showCursor ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN;
     }
 
     /**
