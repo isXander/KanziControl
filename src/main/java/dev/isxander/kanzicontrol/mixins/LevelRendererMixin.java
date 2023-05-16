@@ -7,24 +7,49 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.isxander.kanzicontrol.blockhighlight.BlockHighlightRenderTypes;
 import dev.isxander.kanzicontrol.config.KanziConfig;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
     @Shadow private @Nullable ClientLevel level;
+
+    @Shadow @Final private Minecraft minecraft;
+
+    @ModifyVariable(method = "renderLevel", at = @At("HEAD"), argsOnly = true)
+    private boolean shouldRenderHitOutline(boolean renderHitOutline) {
+        HitResult hitResult = minecraft.hitResult;
+        boolean isLookingAtBlock = hitResult.getType() == HitResult.Type.BLOCK;
+        if (isLookingAtBlock) {
+            Minecraft minecraft = Minecraft.getInstance();
+            BlockPos blockPos = ((BlockHitResult) hitResult).getBlockPos();
+            boolean canBreak = !minecraft.player.blockActionRestricted(minecraft.level, blockPos, minecraft.gameMode.getPlayerMode());
+            boolean canPlace = minecraft.gameMode.getPlayerMode() != GameType.ADVENTURE || minecraft.player.getMainHandItem().hasAdventureModePlaceTagForBlock(minecraft.level.registryAccess().registryOrThrow(Registries.BLOCK), new BlockInWorld(minecraft.level, ((BlockHitResult) hitResult).getBlockPos(), false)) || minecraft.player.getMainHandItem().isEmpty();
+            return (canBreak || canPlace) && renderHitOutline;
+        }
+        return false;
+    }
 
     @WrapOperation(
             method = "renderLevel",

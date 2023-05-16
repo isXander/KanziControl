@@ -1,7 +1,5 @@
 package dev.isxander.kanzicontrol.interactionarea;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
 import org.apache.commons.lang3.Validate;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;

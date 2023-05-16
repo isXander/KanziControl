@@ -105,7 +105,7 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
         private float colPaddingLeft, colPaddingRight, colPaddingTop, colPaddingBottom;
         private ElementPosition elementPosition = null;
 
-        private float x, y;
+        private float offsetX, offsetY;
         private AnchorPoint windowAnchor = AnchorPoint.TOP_LEFT;
         private AnchorPoint origin = AnchorPoint.TOP_LEFT;
 
@@ -150,9 +150,9 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
             return this;
         }
 
-        public Builder position(AnchorPoint windowAnchor, float x, float y, AnchorPoint origin) {
-            this.x = x;
-            this.y = y;
+        public Builder position(AnchorPoint windowAnchor, float offsetX, float offsetY, AnchorPoint origin) {
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
             this.windowAnchor = windowAnchor;
             this.origin = origin;
             return this;
@@ -168,7 +168,7 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
                     colPaddingLeft, colPaddingRight,
                     colPaddingTop, colPaddingBottom,
                     elementPosition,
-                    x, y,
+                    offsetX, offsetY,
                     windowAnchor, origin
             );
         }

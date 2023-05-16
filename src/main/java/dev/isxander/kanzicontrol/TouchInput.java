@@ -21,13 +21,22 @@ public class TouchInput extends Input {
 
     @Override
     public void tick(boolean slowDown, float movementMultiplier) {
+        var minecraft = Minecraft.getInstance();
+
         if (forwardRemainingTicks > 0) {
             this.up = true;
+            this.down = this.left = this.right = false;
             this.forwardImpulse = 1;
+            this.leftImpulse = 0;
             forwardRemainingTicks--;
         } else {
-            this.up = false;
-            this.forwardImpulse = 0;
+            up = minecraft.options.keyUp.isDown();
+            down = minecraft.options.keyDown.isDown();
+            left = minecraft.options.keyLeft.isDown();
+            right = minecraft.options.keyRight.isDown();
+
+            forwardImpulse = (up ? 1 : 0) - (down ? 1 : 0);
+            leftImpulse = (left ? 1 : 0) - (right ? 1 : 0);
         }
 
         if (jumpTimer-- <= 0) {
@@ -39,7 +48,6 @@ public class TouchInput extends Input {
             this.jumping = true;
         }
 
-        var minecraft = Minecraft.getInstance();
         if (isMining && !minecraft.player.isUsingItem()) {
             if (minecraft.gameMode != null && minecraft.hitResult instanceof BlockHitResult blockHit) {
                 if (!minecraft.level.getBlockState(blockHit.getBlockPos()).isAir() && minecraft.gameMode.continueDestroyBlock(blockHit.getBlockPos(), blockHit.getDirection())) {
@@ -50,6 +58,10 @@ public class TouchInput extends Input {
                 cancelMining();
             }
         }
+
+        if (!jumping)
+            jumping = minecraft.options.keyJump.isDown();
+        shiftKeyDown = minecraft.options.keyShift.isDown();
     }
 
     public void setForward(int time) {
