@@ -12,6 +12,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ClientAdvancementsMixin {
     @WrapWithCondition(method = "update", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/toasts/ToastComponent;addToast(Lnet/minecraft/client/gui/components/toasts/Toast;)V"))
     private boolean shouldAddAdvancementToast(ToastComponent toastComponent, Toast toastInstance) {
-        return !KanziConfig.INSTANCE.getConfig().enabled;
+        return !KanziConfig.INSTANCE.instance().enabled;
     }
 }

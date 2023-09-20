@@ -1,0 +1,28 @@
+- [x] Eat button - automatically switch to food slot and eat
+  - [x] Switch to slot
+    - [x] Must work in entire inventory
+  - [x] Hold 'use' until food is eaten
+  - [x] Flash eat button on low hunger, should flash more the more urgent it is, take health into account
+    - [x] Make the flash a fade
+- [ ] Audio cue on low hunger and health
+- [x] Flash screen red when taking damage
+- [x] Highlight parts of the screen to indicate what Kanzi should press
+  - [x] Should be invokable through commands/datapack
+  - [x] Highlight look quadrants (controlled thru arrow keys AND commands)
+  - [ ] Highlight buttons
+  - [x] Controllable cursor to indicate to Kanzi
+  - [ ] Highlight inventory slots
+- [x] Prevent Kanzi fighting the re-centering look direction
+- [x] Modded food reward indicator found in the datapack last time - should hook into the indicator system
+- [x] Indicate X on failure, triggerable by keybind AND command
+- [x] Clicking entities invokes action
+  - [x] Clicking on ender-dragon should pull bow, aim at dragon and shoot
+    - [x] Account for dragon's velocity and over-shoot ~~(include deviancy)~~ (not needed as not 100% accurate)
+  - [x] Clicking on end crystal should pull bow, aim at crystal and shoot
+    - [x] Shoot at the top of the crystal rather than the middle
+    - [x] Extend end crystal hit-box upwards
+  - [x] ~~Clicking on end crystal show face the crystal, indicate a tick, then look back in previous location (TRAINING)~~
+- [x] Server-client handshake on login to prevent clients from joining without the mod/correct version of the mod
+- [x] Auto-sneak when on a 5-block or more ledge
+- [x] Don't recenter look direction when breaking block
+- [x] Compat bossbar and shift bonobo buttons below

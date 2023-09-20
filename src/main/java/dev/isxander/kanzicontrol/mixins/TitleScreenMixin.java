@@ -1,6 +1,6 @@
 package dev.isxander.kanzicontrol.mixins;
 
-import dev.isxander.kanzicontrol.config.ConfigGuiGen;
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -22,7 +22,7 @@ public abstract class TitleScreenMixin extends Screen {
                 Button.builder(
                         Component.literal("Bonobos..."),
                         btn ->
-                                minecraft.setScreen(ConfigGuiGen.generateConfigScreen((TitleScreen) (Object) this))
+                                minecraft.setScreen(KanziConfig.INSTANCE.generateGui().generateScreen((TitleScreen) (Object) this))
                 )
                 .pos(0, 0)
                 .width(60)

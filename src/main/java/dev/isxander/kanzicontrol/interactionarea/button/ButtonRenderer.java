@@ -1,7 +1,7 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 
 public interface ButtonRenderer {
-    void render(PoseStack poseStack, float deltaTime, ButtonInteractionArea button, boolean fingerDown);
+    void render(GuiGraphics graphics, float deltaTime, ButtonInteractionArea button, boolean fingerDown);
 }

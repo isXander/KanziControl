@@ -10,7 +10,7 @@ import org.joml.Vector2f;
 import java.util.List;
 
 public class DebugRendering {
-    private static List<Integer> DEBUG_COLOURS = List.of(
+    private static final List<Integer> DEBUG_COLOURS = List.of(
             0x40FF0000,
             0x4000FF00,
             0x400000FF,

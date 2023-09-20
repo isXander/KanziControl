@@ -6,6 +6,7 @@ import net.minecraft.client.player.Input;
 import net.minecraft.client.player.KeyboardInput;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 
@@ -149,6 +150,38 @@ public class TouchInput extends Input {
         } else {
             ((MinecraftAccessor) minecraft).invokeStartUseItem();
         }
+    }
+
+    public void startUseItem() {
+        stopUsingItem();
+        var minecraft = Minecraft.getInstance();
+        if (!minecraft.player.isUsingItem()) {
+            ((MinecraftAccessor) minecraft).invokeStartUseItem();
+        }
+    }
+
+    public void stopUsingItem() {
+        var minecraft = Minecraft.getInstance();
+        minecraft.gameMode.releaseUsingItem(minecraft.player);
+    }
+
+    public boolean isUsingItem() {
+        return Minecraft.getInstance().player.isUsingItem();
+    }
+
+    public boolean switchToFoodAndUse() {
+        stopUsingItem();
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = getPlayer().getInventory().getItem(i);
+            if (stack.isEdible()) {
+                getPlayer().getInventory().selected = i;
+                toggleUseItem();
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private LocalPlayer getPlayer() {

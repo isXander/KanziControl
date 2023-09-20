@@ -38,7 +38,8 @@ public final class ButtonRenderPredicates {
                 }
                 return false;
             }),
-            LOOK_AT_ENTITY = predicate("look_at_entity", ctx -> ctx.hitResult().getType() == HitResult.Type.ENTITY);
+            LOOK_AT_ENTITY = predicate("look_at_entity", ctx -> ctx.hitResult().getType() == HitResult.Type.ENTITY),
+            HUNGRY = predicate("hungry", ctx -> Minecraft.getInstance().player.getFoodData().needsFood());
 
     private static ButtonRenderPredicate predicate(String id, ButtonRenderPredicate predicate) {
         ALL.put(id, predicate);

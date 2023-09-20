@@ -1,6 +1,6 @@
 package dev.isxander.kanzicontrol.interactionarea;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2fc;
 
@@ -11,22 +11,22 @@ public interface InteractionAreaContainer<T extends InteractionArea> extends Int
     void setCurrentInteractionArea(T area);
     @Nullable T getCurrentInteractionArea();
 
-    default void fingerDown(Vector2fc position) {
-        T touchedArea = null;
+    default boolean fingerDown(Vector2fc position) {
+        List<T> candidates = getInteractionAreas().stream()
+                .filter(area -> area.isInBounds(position))
+                .toList();
 
         // find topmost area that is over mouse
-        var iterator = getInteractionAreas().listIterator(getInteractionAreas().size());
+        var iterator = candidates.listIterator(candidates.size());
         while (iterator.hasPrevious()) {
             var area = iterator.previous();
-            if (area.isInBounds(position)) {
-                touchedArea = area;
-                break;
+            if (area.fingerDown(position)) {
+                setCurrentInteractionArea(area);
+                return true;
             }
         }
 
-        setCurrentInteractionArea(touchedArea);
-        if (touchedArea != null)
-            touchedArea.fingerDown(position);
+        return false;
     }
 
     @Override
@@ -45,9 +45,9 @@ public interface InteractionAreaContainer<T extends InteractionArea> extends Int
     }
 
     @Override
-    default void render(PoseStack stack, float deltaTime, Vector2fc position, boolean interacting) {
+    default void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
         for (InteractionArea area : getInteractionAreas()) {
-            area.render(stack, deltaTime, position, area == getCurrentInteractionArea());
+            area.render(graphics, deltaTime, position, area == getCurrentInteractionArea());
         }
     }
 

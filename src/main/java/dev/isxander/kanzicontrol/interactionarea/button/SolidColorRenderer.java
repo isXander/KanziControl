@@ -1,8 +1,7 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.gui.GuiGraphics;
 
 public class SolidColorRenderer implements ButtonRenderer {
     private final int color;
@@ -12,14 +11,13 @@ public class SolidColorRenderer implements ButtonRenderer {
     }
 
     @Override
-    public void render(PoseStack poseStack, float deltaTime, ButtonInteractionArea button, boolean fingerDown) {
+    public void render(GuiGraphics graphics, float deltaTime, ButtonInteractionArea button, boolean fingerDown) {
         var size = button.getSize();
         var pos = button.getPosition();
 
         RenderSystem.enableBlend();
 
-        GuiComponent.fill(
-                poseStack,
+        graphics.fill(
                 (int) pos.x(), (int) pos.y(),
                 (int) pos.x() + (int) size.x(), (int) pos.y() + (int) size.y(),
                 fingerDown ? -1 : color

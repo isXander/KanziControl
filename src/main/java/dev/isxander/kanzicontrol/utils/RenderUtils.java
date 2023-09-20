@@ -9,7 +9,10 @@ import org.joml.*;
 import org.lwjgl.opengl.GL11;
 
 public class RenderUtils {
-    public static final Matrix4f lastWorldSpaceMatrix = new Matrix4f();
+    public static Matrix4f lastProjectionMatrix = new Matrix4f();
+    public static Matrix4f lastModelViewMatrix = new Matrix4f();
+    public static Matrix4f lastWorldSpaceMatrix = new Matrix4f();
+
     private static final Minecraft minecraft = Minecraft.getInstance();
 
     public static Vector2f scaledFingerPosition(double fingerScreenX, double fingerScreenY) {
@@ -29,8 +32,8 @@ public class RenderUtils {
         GL11.glGetIntegerv(GL11.GL_VIEWPORT, viewport);
         Vector3f target = new Vector3f();
 
-        Matrix4f matrixProj = new Matrix4f(RenderSystem.getProjectionMatrix());
-        Matrix4f matrixModel = new Matrix4f(RenderSystem.getModelViewMatrix());
+        Matrix4f matrixProj = new Matrix4f(lastProjectionMatrix);
+        Matrix4f matrixModel = new Matrix4f(lastModelViewMatrix);
 
         matrixProj.mul(matrixModel)
                 .mul(lastWorldSpaceMatrix)

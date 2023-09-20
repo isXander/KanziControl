@@ -31,6 +31,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
+import java.awt.*;
+
 @Mixin(LevelRenderer.class)
 public class LevelRendererMixin {
     @Shadow private @Nullable ClientLevel level;
@@ -39,6 +41,9 @@ public class LevelRendererMixin {
 
     @ModifyVariable(method = "renderLevel", at = @At("HEAD"), argsOnly = true)
     private boolean shouldRenderHitOutline(boolean renderHitOutline) {
+        if (!KanziConfig.INSTANCE.instance().enabled)
+            return renderHitOutline;
+
         HitResult hitResult = minecraft.hitResult;
         boolean isLookingAtBlock = hitResult.getType() == HitResult.Type.BLOCK;
         if (isLookingAtBlock) {
@@ -59,23 +64,23 @@ public class LevelRendererMixin {
             )
     )
     private void modifyRenderType(LevelRenderer instance, PoseStack matrices, VertexConsumer consumer, Entity entity, double offsetX, double offsetY, double offsetZ, BlockPos blockPos, BlockState blockState, Operation<Void> original, @Local MultiBufferSource.BufferSource bufferSource) {
-        if (!KanziConfig.INSTANCE.getConfig().useEnhancedBlockHighlight) {
+        if (!KanziConfig.INSTANCE.instance().enabled || !KanziConfig.INSTANCE.instance().useEnhancedBlockHighlight) {
             original.call(instance, matrices, consumer, entity, offsetX, offsetY, offsetZ, blockPos, blockState);
             return;
         }
 
         VoxelShape voxelShape = blockState.getShape(level, blockPos, CollisionContext.of(entity));
 
-        RenderType renderType = KanziConfig.INSTANCE.getConfig().ignoreBlockHighlightDepth
+        RenderType renderType = KanziConfig.INSTANCE.instance().ignoreBlockHighlightDepth
                 ? BlockHighlightRenderTypes.NO_DEPTH_BLOCK_FILL
                 : RenderType.debugFilledBox();
         VertexConsumer vertexConsumer = bufferSource.getBuffer(renderType);
 
-        int color = KanziConfig.INSTANCE.getConfig().blockHighlightColor;
-        float r = (color >> 16 & 0xFF) / 255f;
-        float g = (color >>  8 & 0xFF) / 255f;
-        float b = (color >>  0 & 0xFF) / 255f;
-        float a = (color >> 24 & 0xFF) / 255f;
+        Color color = KanziConfig.INSTANCE.instance().blockHighlightColor;
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
 
         for (AABB part : voxelShape.toAabbs()) {
             AABB positioned = part.move(blockPos).move(-offsetX, -offsetY, -offsetZ);

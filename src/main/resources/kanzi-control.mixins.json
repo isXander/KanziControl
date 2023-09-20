@@ -4,6 +4,7 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_17",
   "client": [
+    "BossHealthOverlayMixin",
     "ChatComponentMixin",
     "ClientAdvancementsMixin",
     "ClientPacketListenerMixin",
@@ -11,6 +12,7 @@
     "GameRendererAccessor",
     "GameRendererMixin",
     "LevelRendererMixin",
+    "LocalPlayerMixin",
     "MinecraftAccessor",
     "MinecraftMixin",
     "MouseHandlerAccessor",
@@ -19,6 +21,8 @@
     "OptionsMixin",
     "PauseScreenMixin",
     "TitleScreenMixin",
-    "TutorialMixin"
+    "TutorialMixin",
+    "EntityTypeMixin",
+    "PlayerAccessor"
   ]
 }

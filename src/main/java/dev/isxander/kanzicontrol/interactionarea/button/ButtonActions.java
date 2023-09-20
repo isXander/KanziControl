@@ -1,6 +1,8 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
 import dev.isxander.kanzicontrol.TouchInput;
+import dev.isxander.kanzicontrol.entityhandler.AutoEatTask;
+import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import net.minecraft.client.Minecraft;
 
 import java.util.HashMap;
@@ -16,6 +18,7 @@ public class ButtonActions {
             BREAK = action("break", ButtonAction.down(TouchInput.INSTANCE::tryStartMining).withNarration("break").cooldown(1000)),
             USE = action("use", ButtonAction.down(TouchInput.INSTANCE::toggleUseItem).withNarration("use").cooldown(1000)),
             TOGGLE_SWIM_DOWN = action("swim_down", ButtonAction.down(TouchInput.INSTANCE::toggleSwimDown).withNarration(() -> TouchInput.INSTANCE.swimDown ? "sink" : "swim up").cooldown(1000)),
+            EAT = action("eat", ButtonAction.down(() -> RootInteractionArea.getInstance().TOUCH_ENTITY.queueHandler(new AutoEatTask())).withNarration("eat").cooldown(1000)),
             HOTBAR_SLOT_1 = action("hotbar_slot_1", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 0)),
             HOTBAR_SLOT_2 = action("hotbar_slot_2", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 1)),
             HOTBAR_SLOT_3 = action("hotbar_slot_3", ButtonAction.down(() -> Minecraft.getInstance().player.getInventory().selected = 2)),

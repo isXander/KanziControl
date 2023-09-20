@@ -22,14 +22,14 @@ public class ClientPacketListenerMixin {
 
     @Inject(method = "handleLogin", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/LocalPlayer;input:Lnet/minecraft/client/player/Input;", opcode = Opcodes.ASTORE, shift = At.Shift.AFTER))
     private void overrideNewPlayerInput(ClientboundLoginPacket packet, CallbackInfo ci) {
-        if (KanziConfig.INSTANCE.getConfig().enabled) {
+        if (KanziConfig.INSTANCE.instance().enabled) {
             TouchInput.INSTANCE.setEnabled(true, minecraft.player);
         }
     }
 
     @Inject(method = "handleRespawn", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/LocalPlayer;input:Lnet/minecraft/client/player/Input;", opcode = Opcodes.ASTORE, shift = At.Shift.AFTER))
     private void overrideRespawnInput(ClientboundRespawnPacket packet, CallbackInfo ci, @Local(ordinal = 1) LocalPlayer newPlayer) {
-        if (KanziConfig.INSTANCE.getConfig().enabled) {
+        if (KanziConfig.INSTANCE.instance().enabled) {
             TouchInput.INSTANCE.setEnabled(true, newPlayer);
         }
     }

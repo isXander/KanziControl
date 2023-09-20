@@ -1,18 +1,17 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import dev.isxander.kanzicontrol.interactionarea.PositionableElement;
+import net.minecraft.client.gui.GuiGraphics;
 import org.joml.Vector2f;
 import org.joml.Vector2fc;
 
-import java.util.function.Consumer;
-
 public class ButtonInteractionArea implements PositionableElement {
-    private final ButtonRenderer renderer;
-    private final Vector2f position;
-    private final Vector2fc size;
-    private final ButtonAction action;
-    private final ButtonRenderPredicate predicate;
+    protected final ButtonRenderer renderer;
+    protected final Vector2f position;
+    protected final Vector2fc size;
+    protected final ButtonAction action;
+    protected final ButtonRenderPredicate predicate;
+    protected boolean canRender = true;
 
     public ButtonInteractionArea(ButtonRenderer renderer, float width, float height, ButtonAction action, ButtonRenderPredicate predicate) {
         this.renderer = renderer;
@@ -38,8 +37,9 @@ public class ButtonInteractionArea implements PositionableElement {
     }
 
     @Override
-    public void fingerDown(Vector2fc position) {
+    public boolean fingerDown(Vector2fc position) {
         this.action.onFingerStateChange(true);
+        return true;
     }
 
     @Override
@@ -48,18 +48,19 @@ public class ButtonInteractionArea implements PositionableElement {
     }
 
     @Override
-    public void render(PoseStack stack, float deltaTime, Vector2fc position, boolean interacting) {
-        if (this.canRender()) {
-            this.renderer.render(stack, deltaTime, this, interacting);
+    public void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
+        if (canRender) {
+            this.renderer.render(graphics, deltaTime, this, interacting);
         }
     }
 
     @Override
-    public boolean isInBounds(Vector2fc position) {
-        return PositionableElement.super.isInBounds(position) && this.canRender();
+    public void tick(Vector2fc position, boolean interacting) {
+        canRender = this.predicate.test(new ButtonRenderPredicate.RenderCtx(minecraft().hitResult, false));
     }
 
-    public boolean canRender() {
-        return this.predicate.test(new ButtonRenderPredicate.RenderCtx(minecraft().hitResult, false));
+    @Override
+    public boolean isInBounds(Vector2fc position) {
+        return PositionableElement.super.isInBounds(position) && this.canRender;
     }
 }

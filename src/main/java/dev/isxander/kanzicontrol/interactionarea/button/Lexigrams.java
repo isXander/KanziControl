@@ -10,8 +10,10 @@ public final class Lexigrams {
             FIGHT = renderer("fight"),
             JUMP = renderer("jump"),
             BREAK = renderer("break"),
-            TOGGLE_SWIM_DOWN = renderer("swim_down"),
-            USE = renderer("use");
+            TOGGLE_SWIM_DOWN = renderer("swim"),
+            USE = renderer("use"),
+            EAT = renderer("eat"),
+            EAT_HIGHLIGHTED = renderer("eat_highlighted");
 
     private static LexigramRenderer renderer(String lexigramId) {
         LexigramRenderer renderer = new LexigramRenderer(lexigramId);

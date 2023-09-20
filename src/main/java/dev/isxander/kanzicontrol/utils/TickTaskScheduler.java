@@ -38,17 +38,22 @@ public class TickTaskScheduler {
     }
 
     public static final class Task {
+        private final int ticks;
         private int ticksRemaining;
         private final Consumer<Minecraft> runnable;
         private boolean canceled;
 
         private Task(int ticks, Consumer<Minecraft> runnable) {
-            this.ticksRemaining = ticks;
+            this.ticks = this.ticksRemaining = ticks;
             this.runnable = runnable;
         }
 
         public void cancel() {
             canceled = true;
+        }
+
+        public void resetTimer() {
+            ticksRemaining = ticks;
         }
 
         private boolean isCanceled() {

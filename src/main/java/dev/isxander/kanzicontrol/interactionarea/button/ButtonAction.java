@@ -28,7 +28,7 @@ public interface ButtonAction {
     default ButtonAction withNarration(Supplier<String> message) {
         return (fingerDown) -> {
             this.onFingerStateChange(fingerDown);
-            if (fingerDown && KanziConfig.INSTANCE.getConfig().speechEnabled) {
+            if (fingerDown && KanziConfig.INSTANCE.instance().speechEnabled) {
                 Narrator narrator = ((GameNarratorAccessor) Minecraft.getInstance().getNarrator()).getNarrator();
                 if (narrator.active()) {
                     narrator.say(message.get(), true);

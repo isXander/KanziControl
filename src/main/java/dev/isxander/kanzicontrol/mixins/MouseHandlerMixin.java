@@ -3,8 +3,7 @@ package dev.isxander.kanzicontrol.mixins;
 import com.mojang.blaze3d.Blaze3D;
 import com.mojang.blaze3d.platform.InputConstants;
 import dev.isxander.kanzicontrol.config.KanziConfig;
-import dev.isxander.kanzicontrol.debug.KanziControlDebug;
-import dev.isxander.kanzicontrol.interactionarea.InteractionAreaStorage;
+import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.Screen;
@@ -31,11 +30,11 @@ public class MouseHandlerMixin {
      */
     @ModifyArg(method = "grabMouse", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/platform/InputConstants;grabOrReleaseMouse(JIDD)V"))
     private int changeMouseState(int disabledState) {
-        if (!KanziConfig.INSTANCE.getConfig().enabled) {
+        if (!KanziConfig.INSTANCE.instance().enabled) {
             return disabledState;
         }
 
-        return KanziConfig.INSTANCE.getConfig().showCursor ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN;
+        return KanziConfig.INSTANCE.instance().showCursor ? GLFW.GLFW_CURSOR_NORMAL : GLFW.GLFW_CURSOR_HIDDEN;
     }
 
     /**
@@ -44,7 +43,7 @@ public class MouseHandlerMixin {
      */
     @Inject(method = "onPress", at = @At("HEAD"), cancellable = true)
     public void overridePress(long window, int button, int action, int modifiers, CallbackInfo ci) {
-        if (!KanziConfig.INSTANCE.getConfig().enabled) {
+        if (!KanziConfig.INSTANCE.instance().enabled) {
             return;
         }
 
@@ -62,9 +61,9 @@ public class MouseHandlerMixin {
                 activeButton = 0;
                 mousePressedTime = Blaze3D.getTime();
 
-                InteractionAreaStorage.onMouseDown((float) xpos, (float) ypos);
+                RootInteractionArea.onMouseDown((float) xpos, (float) ypos);
             } else {
-                InteractionAreaStorage.onMouseUp((float) xpos, (float) ypos);
+                RootInteractionArea.onMouseUp((float) xpos, (float) ypos);
             }
         }
 
@@ -84,13 +83,13 @@ public class MouseHandlerMixin {
 
     @Inject(method = "onMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;turnPlayer()V"))
     private void onProcessMouseMove(long window, double x, double y, CallbackInfo ci) {
-        if (KanziConfig.INSTANCE.getConfig().enabled)
-            InteractionAreaStorage.onMouseMove((float) x, (float) y);
+        if (KanziConfig.INSTANCE.instance().enabled)
+            RootInteractionArea.onMouseMove((float) x, (float) y);
     }
 
     @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
     public void stopTurningPlayer(CallbackInfo ci) {
-        if (KanziConfig.INSTANCE.getConfig().enabled)
+        if (KanziConfig.INSTANCE.instance().enabled)
             ci.cancel();
     }
 }

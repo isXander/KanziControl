@@ -2,17 +2,21 @@ plugins {
     java
 
     alias(libs.plugins.loom)
-    alias(libs.plugins.loom.quiltflower)
+    alias(libs.plugins.loom.vineflower)
 }
 
 group = "dev.isxander"
-version = "1.0.0"
+version = "2.0.0"
 
 repositories {
     mavenCentral()
     maven("https://maven.isxander.dev/releases")
+    maven("https://maven.isxander.dev/snapshots")
     maven("https://jitpack.io")
     maven("https://maven.quiltmc.org/repository/release")
+    maven("https://maven.terraformersmc.com/releases")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+    maven("https://maven.ladysnake.org/releases")
 }
 
 val minecraftVersion = libs.versions.minecraft.get()
@@ -38,6 +42,8 @@ dependencies {
         implementation(it)
         include(it)
     }
+
+    include(modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")!!)
 }
 
 tasks {

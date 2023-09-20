@@ -1,23 +1,23 @@
 [versions]
-loom = "1.1.+"
-loom_quiltflower = "1.8.+"
+loom = "1.3.+"
+loom_vineflower = "1.11.+"
 
-minecraft = "1.19.4"
-quilt_mappings = "10"
-fabric_loader = "0.14.19"
-fabric_api = "0.76.0+1.19.4"
-yet_another_config_lib = "2.4.0"
-mixin_extras = "0.2.0-beta.6"
+minecraft = "1.20.1"
+quilt_mappings = "23"
+fabric_loader = "0.14.22"
+fabric_api = "0.87.0+1.20.1"
+yet_another_config_lib = "3.2.0+1.20+1.20.x.dev-SNAPSHOT+1.20.x.dev-SNAPSHOT"
+mixin_extras = "0.2.0-beta.9"
 quilt_json5 = "1.0.3"
 
 [libraries]
 minecraft = { module = "com.mojang:minecraft", version.ref = "minecraft" }
 fabric_loader = { module = "net.fabricmc:fabric-loader", version.ref = "fabric_loader" }
 fabric_api = { module = "net.fabricmc.fabric-api:fabric-api", version.ref = "fabric_api" }
-yet_another_config_lib = { module = "dev.isxander:yet-another-config-lib", version.ref = "yet_another_config_lib" }
+yet_another_config_lib = { module = "dev.isxander.yacl:yet-another-config-lib-fabric", version.ref = "yet_another_config_lib" }
 mixin_extras = { module = "com.github.llamalad7.mixinextras:mixinextras-fabric", version.ref = "mixin_extras" }
 quilt_json5 = { module = "org.quiltmc:quilt-json5", version.ref = "quilt_json5" }
 
 [plugins]
 loom = { id = "fabric-loom", version.ref = "loom" }
-loom_quiltflower = { id = "io.github.juuxel.loom-quiltflower", version.ref = "loom_quiltflower" }
+loom_vineflower = { id = "io.github.juuxel.loom-vineflower", version.ref = "loom_vineflower" }

@@ -16,6 +16,7 @@ public class ChatComponentMixin {
 
     @ModifyReturnValue(method = "isChatHidden", at = @At("RETURN"))
     private boolean modifyChatHidden(boolean original) {
-        return original || (!(minecraft.screen instanceof ChatScreen) && KanziConfig.INSTANCE.getConfig().enabled);
+        // don't distract Kanzi with chat commands
+        return original || (!(minecraft.screen instanceof ChatScreen) && KanziConfig.INSTANCE.instance().enabled);
     }
 }
