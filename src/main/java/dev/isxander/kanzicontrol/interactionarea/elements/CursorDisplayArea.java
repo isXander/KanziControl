@@ -22,7 +22,7 @@ public class CursorDisplayArea implements InteractionArea {
 
             graphics.pose().pushPose();
             graphics.pose().translate(currentX, currentY, 0);
-            graphics.pose().scale(0.75f, 0.75f, 1f);
+            graphics.pose().scale(2f, 2f, 1f);
 
             graphics.blit(CURSOR_TEXTURE, 0, 0, 0, 0, 0, 16, 16, 16, 16);
 
@@ -47,10 +47,10 @@ public class CursorDisplayArea implements InteractionArea {
 
         this.targetX += x;
         this.targetY += y;
-        this.targetX = Mth.clamp(targetX, 0, width - 12);
-        this.targetY = Mth.clamp(targetY, 0, height - 12);
+        this.targetX = Mth.clamp(targetX, 0, width - 32);
+        this.targetY = Mth.clamp(targetY, 0, height - 32);
 
-        displayTicks = 20;
+        displayTicks = 40;
     }
 
     @Override

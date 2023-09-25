@@ -141,6 +141,10 @@ public class TouchLook implements InteractionArea {
             resetDelay.startAgain();
     }
 
+    public void stopNow() {
+        movementAnimation.cancelFamily();
+    }
+
     private Vector2f distFromCenter(Vector2fc position) {
         Vector2fc windowSize = windowSize();
         return new Vector2f(position).sub(windowSize.x() / 2f, windowSize.y() / 2f);

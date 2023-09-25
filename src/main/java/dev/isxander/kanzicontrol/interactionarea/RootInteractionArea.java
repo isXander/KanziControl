@@ -28,9 +28,9 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
         insertBelow(
                 RowInteractionArea.builder()
                         /* JMP */ //.element(new ButtonInteractionArea(Lexigrams.JUMP, 30f, 30f, ButtonActions.JUMP, ButtonRenderPredicates.ALWAYS))
-                        /* BRK */ .element(new ButtonInteractionArea(Lexigrams.BREAK, 32f, 32f, ButtonActions.BREAK, ButtonRenderPredicates.ALWAYS))
+                        /* BRK */ //.element(new ButtonInteractionArea(Lexigrams.BREAK, 32f, 32f, ButtonActions.BREAK, ButtonRenderPredicates.ALWAYS))
                         /* ATK */ //.element(new ButtonInteractionArea(Lexigrams.FIGHT, 30f, 30f, ButtonActions.FIGHT, ButtonRenderPredicates.ALWAYS))
-                        /* USE */ .element(new ButtonInteractionArea(Lexigrams.USE, 32f, 32f, ButtonActions.USE, ButtonRenderPredicates.ALWAYS))
+                        /* USE */ //.element(new ButtonInteractionArea(Lexigrams.USE, 32f, 32f, ButtonActions.USE, ButtonRenderPredicates.ALWAYS))
                         /* SWM */ //.element(new ButtonInteractionArea(Lexigrams.TOGGLE_SWIM_DOWN, 30f, 30f, ButtonActions.TOGGLE_SWIM_DOWN, ButtonRenderPredicates.ALWAYS))
                         /* EAT */ .element(new EatButtonArea(32f, 32f))
                         .elementPadding(10f)

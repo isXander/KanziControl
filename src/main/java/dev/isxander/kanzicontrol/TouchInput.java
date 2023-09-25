@@ -74,6 +74,10 @@ public class TouchInput extends Input {
         return forwardRemainingTicks > 0;
     }
 
+    public boolean isMining() {
+        return isMining;
+    }
+
     public void setBack(boolean back) {
         this.down = back;
         this.forwardImpulse = back ? -1 : 0;

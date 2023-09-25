@@ -13,7 +13,7 @@ public class EatButtonArea extends ButtonInteractionArea {
     private float time = 0f;
 
     public EatButtonArea(float width, float height) {
-        super(Lexigrams.EAT, width, height, ButtonActions.EAT, ButtonRenderPredicates.ALWAYS);
+        super(Lexigrams.EAT, width, height, ButtonActions.EAT, ButtonRenderPredicates.HUNGRY);
     }
 
     @Override
@@ -33,25 +33,11 @@ public class EatButtonArea extends ButtonInteractionArea {
         } else {
             this.time = 0f;
         }
-
-//        if (eatUrgency > 0f && canRender) {
-//            int flashTime = (int) ((1f - eatUrgency + 0.2f) * 40);
-//            int interval = ticks % flashTime * 5;
-//            if (interval < flashTime || (interval > flashTime * 3 && interval < flashTime * 4)) {
-//                Lexigrams.EAT_HIGHLIGHTED.render(graphics, deltaTime, this, interacting);
-//            } else {
-//                super.render(graphics, deltaTime, position, interacting);
-//            }
-//        } else {
-//            super.render(graphics, deltaTime, position, interacting);
-//        }
     }
 
     @Override
     public void tick(Vector2fc position, boolean interacting) {
         updateEatUrgency();
-
-//       ticks++;
     }
 
     private void updateEatUrgency() {

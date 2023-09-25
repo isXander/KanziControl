@@ -46,7 +46,7 @@ public class TouchEntity implements InteractionArea {
 
         queueHandler(handler.get());
 
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.EXPERIENCE_ORB_PICKUP, 1f));
+        minecraft().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.EXPERIENCE_ORB_PICKUP, 1f));
 
         return true;
     }
@@ -57,6 +57,8 @@ public class TouchEntity implements InteractionArea {
             currentHandler = handlerQueue.poll();
             if (currentHandler != null) {
                 TouchInput.INSTANCE.setForward(0);
+                RootInteractionArea.getInstance().TOUCH_LOOK.stopNow();
+
                 currentHandler.start();
             }
         }

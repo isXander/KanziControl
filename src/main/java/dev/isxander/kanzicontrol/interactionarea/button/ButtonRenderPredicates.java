@@ -1,8 +1,10 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
 import net.minecraft.world.phys.BlockHitResult;
@@ -39,7 +41,14 @@ public final class ButtonRenderPredicates {
                 return false;
             }),
             LOOK_AT_ENTITY = predicate("look_at_entity", ctx -> ctx.hitResult().getType() == HitResult.Type.ENTITY),
-            HUNGRY = predicate("hungry", ctx -> Minecraft.getInstance().player.getFoodData().needsFood());
+            HUNGRY = predicate("hungry", ctx -> {
+                LocalPlayer player = Minecraft.getInstance().player;
+                if (player == null) return false;
+                ItemStack stack = player.getMainHandItem();
+                if (!stack.isEdible()) stack = player.getOffhandItem();
+                if (!stack.isEdible()) return false;
+                return player.canEat(stack.getItem().getFoodProperties().canAlwaysEat());
+            });
 
     private static ButtonRenderPredicate predicate(String id, ButtonRenderPredicate predicate) {
         ALL.put(id, predicate);
