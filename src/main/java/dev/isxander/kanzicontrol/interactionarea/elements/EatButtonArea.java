@@ -37,6 +37,7 @@ public class EatButtonArea extends ButtonInteractionArea {
 
     @Override
     public void tick(Vector2fc position, boolean interacting) {
+        super.tick(position, interacting);
         updateEatUrgency();
     }
 
