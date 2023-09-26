@@ -30,21 +30,23 @@ public class TouchLook implements InteractionArea {
     public boolean fingerDown(Vector2fc position) {
         KanziConfig config = KanziConfig.INSTANCE.instance();
 
+        LocalPlayer player = minecraft().player;
+        Vector2f distFromCenter = distFromCenter(position);
+        double touchAngle = Math.atan2(distFromCenter.y(), distFromCenter.x());
+        Vector2f freeLookDirection = new Vector2f((float) Math.cos(touchAngle), (float) Math.sin(touchAngle));
+
         if (movementAnimation != null) {
-            if (!movementAnimation.isThisDone())
+            if (!movementAnimation.isThisDone()) {
                 return false;
-            if (resetAnimation != null && resetAnimation.isCurrentlyPlaying())
+            }
+            if (resetAnimation != null && resetAnimation.isCurrentlyPlaying()) {
                 return false;
+            }
             resetAnimation = null;
             movementAnimation = null;
         }
 
         TouchInput.INSTANCE.cancelMining();
-
-        LocalPlayer player = minecraft().player;
-        Vector2f distFromCenter = distFromCenter(position);
-        double touchAngle = Math.atan2(distFromCenter.y(), distFromCenter.x());
-        Vector2f freeLookDirection = new Vector2f((float) Math.cos(touchAngle), (float) Math.sin(touchAngle));
 
         float x = freeLookDirection.x();
         float y = freeLookDirection.y();
@@ -56,22 +58,27 @@ public class TouchLook implements InteractionArea {
             if (resetDelay != null && resetDelay.isCurrentlyPlaying())
                 resetDelay.startAgain();
 
-            movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(calculateTickDuration(config.touchLookDegreesPerTap), Animator::easeOutSin)
-                    .addContinualConsumer(f -> player.turn(f / 0.15, 0.0), 0, config.touchLookDegreesPerTap * Math.signum(x)));
+            int animationTickDuration = calculateTickDuration(config.touchLookDegreesPerTap);
+            if (animationTickDuration > 0) {
+                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTickDuration, Animator::linear)
+                        .addContinualConsumer(f -> player.turn(f / 0.15, 0.0), 0, config.touchLookDegreesPerTap * Math.signum(x)));
+            }
         } else if (Math.abs(y) > Math.abs(x)) {
             if (resetDelay != null && resetDelay.isCurrentlyPlaying())
                 resetDelay.cancelFamily();
 
             int degrees = (int) (Mth.clamp(player.getXRot() + config.touchLookDegreesPerTap * Math.signum(y), -config.maxMinVerticalDegrees, config.maxMinVerticalDegrees) - player.getXRot());
+            int animationTicks = calculateTickDuration(degrees);
 
-            if (degrees != 0) {
-                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(calculateTickDuration(degrees), Animator::easeOutSin)
+            if (animationTicks > 0) {
+                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTicks, Animator::linear)
                         .addContinualConsumer(f -> player.turn(0.0, f / 0.15), 0, config.touchLookDegreesPerTap * Math.signum(y))
                 );
 
                 int resetDegrees = (int) -(player.getXRot() + degrees);
-                if (resetDegrees != 0) {
-                    resetAnimation = new Animator.AnimationInstance(calculateTickDuration(resetDegrees), Animator::easeOutSin)
+                int resetAnimationTicks = calculateTickDuration(resetDegrees);
+                if (resetAnimationTicks > 0) {
+                    resetAnimation = new Animator.AnimationInstance(resetAnimationTicks, Animator::linear)
                             .addContinualConsumer(f -> player.turn(0.0, f / 0.15), 0, resetDegrees);
                     if (resetDelay != null && resetDelay.isCurrentlyPlaying()) {
                         resetDelay.startAgain();

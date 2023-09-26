@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.mixins;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -13,6 +14,9 @@ import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
@@ -93,5 +97,10 @@ public class LevelRendererMixin {
                     r, g, b, a
             );
         }
+    }
+
+    @ModifyVariable(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At("HEAD"), argsOnly = true, ordinal = 0)
+    private boolean shouldIgnoreParticleDistanceCheck(boolean alwaysSpawn, ParticleOptions params) {
+        return alwaysSpawn || params.getType() == ParticleTypes.HAPPY_VILLAGER;
     }
 }
