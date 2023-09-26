@@ -1,15 +1,15 @@
 package dev.isxander.kanzicontrol.mixins;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.entity.EntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.Slice;
+import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(EntityType.class)
 public class EntityTypeMixin {
-    @ModifyArg(
+    @ModifyArgs(
             method = "<clinit>",
             slice = @Slice(from = @At(
                     value = "CONSTANT",
@@ -19,10 +19,10 @@ public class EntityTypeMixin {
                     value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/EntityType$Builder;sized(FF)Lnet/minecraft/world/entity/EntityType$Builder;",
                     ordinal = 0
-            ),
-            index = 1
+            )
     )
-    private static float modifyEndCrystalHeight(float original) {
-        return 3.5f;
+    private static void modifyEndCrystalHeight(Args args) {
+        args.set(0, 6f); // width
+        args.set(1, 6f); // height
     }
 }
