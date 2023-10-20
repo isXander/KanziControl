@@ -20,10 +20,14 @@ public class ScreenDamageFlashArea implements InteractionArea {
     @Override
     public void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
         if (damageFlashAlpha > 0f) {
+            RenderSystem.enableBlend();
             RenderSystem.disableDepthTest();
             RenderSystem.depthMask(false);
             RenderSystem.blendFuncSeparate(
-                    GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO
+                    GlStateManager.SourceFactor.ZERO,
+                    GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR,
+                    GlStateManager.SourceFactor.ONE,
+                    GlStateManager.DestFactor.ZERO
             );
 
             graphics.setColor(0f, damageFlashAlpha, damageFlashAlpha, 1f);
@@ -34,6 +38,7 @@ public class ScreenDamageFlashArea implements InteractionArea {
             RenderSystem.enableDepthTest();
             graphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.defaultBlendFunc();
+            RenderSystem.disableBlend();
         }
     }
 
@@ -50,13 +55,20 @@ public class ScreenDamageFlashArea implements InteractionArea {
     }
 
     private Animator.AnimationInstance createAnimation(int flashCount) {
-        Animator.AnimationInstance animation = new Animator.AnimationInstance(0, t -> t);
-        Animator.AnimationInstance innerAnimation = animation;
+        Animator.AnimationInstance animation = null;
+        Animator.AnimationInstance innerAnimation = null;
 
         for (int i = 0; i < flashCount; i++) {
-            innerAnimation.andThen(createFadeInAnimation()
-                    .andThen(createPauseAnimation()
-                            .andThen(innerAnimation = createFadeOutAnimation())));
+            if (animation == null) {
+                animation = createFadeInAnimation()
+                        .andThen(createPauseAnimation()
+                                .andThen(innerAnimation = createFadeOutAnimation()));
+            } else {
+                innerAnimation.andThen(createPauseAnimation()
+                        .andThen(createFadeInAnimation()
+                                .andThen(createPauseAnimation()
+                                        .andThen(innerAnimation = createFadeOutAnimation()))));
+            }
         }
 
         return animation;

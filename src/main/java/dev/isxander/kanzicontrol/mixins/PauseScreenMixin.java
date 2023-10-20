@@ -16,6 +16,9 @@ public abstract class PauseScreenMixin extends Screen {
         super(title);
     }
 
+    /**
+     * Add config screen button to top left of pause screen.
+     */
     @Inject(method = "init()V", at = @At("RETURN"))
     private void addConfigButton(CallbackInfo ci) {
         addRenderableWidget(

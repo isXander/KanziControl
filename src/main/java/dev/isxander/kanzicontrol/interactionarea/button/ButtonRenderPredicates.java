@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
+import dev.isxander.kanzicontrol.utils.PlayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -12,6 +13,7 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public final class ButtonRenderPredicates {
     public static final Map<String, ButtonRenderPredicate> ALL = new HashMap<>();
@@ -44,10 +46,7 @@ public final class ButtonRenderPredicates {
             HUNGRY = predicate("hungry", ctx -> {
                 LocalPlayer player = Minecraft.getInstance().player;
                 if (player == null) return false;
-                ItemStack stack = player.getMainHandItem();
-                if (!stack.isEdible()) stack = player.getOffhandItem();
-                if (!stack.isEdible()) return false;
-                return player.canEat(stack.getItem().getFoodProperties().canAlwaysEat());
+                return PlayerUtils.hasSlotMatching(stack -> stack.isEdible() && player.canEat(stack.getItem().getFoodProperties().canAlwaysEat()));
             });
 
     private static ButtonRenderPredicate predicate(String id, ButtonRenderPredicate predicate) {

@@ -14,15 +14,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MultiPlayerGameMode.class)
 public class MultiPlayerGameModeMixin {
+    /**
+     * Notify TouchInput that the mining has been completed and it can let go of mine key.
+     */
     @Inject(method = "destroyBlock", at = @At("RETURN"))
     private void tellDestroyBlock(BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (KanziConfig.INSTANCE.instance().enabled)
             TouchInput.INSTANCE.cancelMining();
     }
 
+    /**
+     * Prevent touchlook from recentering Y whilst mining.
+     * @param pos
+     * @param direction
+     * @param cir
+     */
     @Inject(method = "continueDestroyBlock", at = @At("HEAD"))
     private void preventRecentering(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
-        // TODO: reimpliment this
         TouchLook touchLook = RootInteractionArea.getInstance().TOUCH_LOOK;
         if (touchLook != null) touchLook.restartResetDelay();
     }

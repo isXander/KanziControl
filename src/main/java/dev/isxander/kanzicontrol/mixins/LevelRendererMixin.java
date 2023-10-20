@@ -43,6 +43,9 @@ public class LevelRendererMixin {
 
     @Shadow @Final private Minecraft minecraft;
 
+    /**
+     * Mimic adventure mode hit outline but in all modes.
+     */
     @ModifyVariable(method = "renderLevel", at = @At("HEAD"), argsOnly = true)
     private boolean shouldRenderHitOutline(boolean renderHitOutline) {
         if (!KanziConfig.INSTANCE.instance().enabled)
@@ -60,6 +63,9 @@ public class LevelRendererMixin {
         return false;
     }
 
+    /**
+     * Solid block overlay rather than outline.
+     */
     @WrapOperation(
             method = "renderLevel",
             at = @At(
@@ -99,8 +105,19 @@ public class LevelRendererMixin {
         }
     }
 
+    /**
+     * Ignore particle distance check for happy villager particles.
+     */
     @ModifyVariable(method = "addParticleInternal(Lnet/minecraft/core/particles/ParticleOptions;ZZDDDDDD)Lnet/minecraft/client/particle/Particle;", at = @At("HEAD"), argsOnly = true, ordinal = 0)
     private boolean shouldIgnoreParticleDistanceCheck(boolean alwaysSpawn, ParticleOptions params) {
         return alwaysSpawn || params.getType() == ParticleTypes.HAPPY_VILLAGER;
+    }
+
+    /**
+     * Don't thicken fog on boss fights to aid in visibility.
+     */
+    @ModifyExpressionValue(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;shouldCreateWorldFog()Z"))
+    private boolean shouldThickenFogOnBoss(boolean packetState) {
+        return packetState && (!KanziConfig.INSTANCE.instance().dontThickenFog || KanziConfig.INSTANCE.instance().enabled);
     }
 }

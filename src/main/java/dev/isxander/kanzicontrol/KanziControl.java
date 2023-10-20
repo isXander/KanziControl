@@ -7,6 +7,7 @@ import dev.isxander.kanzicontrol.config.MasterModSwitchImpl;
 import dev.isxander.kanzicontrol.indicator.IndicatorHandlerManager;
 import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import dev.isxander.kanzicontrol.mixins.MouseHandlerAccessor;
+import dev.isxander.kanzicontrol.server.KanziControlMain;
 import dev.isxander.kanzicontrol.server.KanziHandshake;
 import dev.isxander.kanzicontrol.server.S2CIndicatorPacket;
 import dev.isxander.yacl3.config.v2.impl.autogen.OptionFactoryRegistry;
@@ -14,7 +15,10 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.renderer.entity.EndCrystalRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,18 +77,19 @@ public class KanziControl implements ClientModInitializer {
         });
 
         KeyBindingHelper.registerKeyBinding(toggleKey = new KeyMapping("Toggle Mod Completely", InputConstants.KEY_P, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(indicateTouchUp = new KeyMapping("Indicate Touch Up", InputConstants.KEY_UP, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(indicateTouchDown = new KeyMapping("Indicate Touch Down", InputConstants.KEY_DOWN, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(indicateTouchLeft = new KeyMapping("Indicate Touch Left", InputConstants.KEY_LEFT, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(indicateTouchRight = new KeyMapping("Indicate Touch Right", InputConstants.KEY_RIGHT, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(moveCursorUp = new KeyMapping("Move Cursor Up", InputConstants.KEY_Y, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(moveCursorDown = new KeyMapping("Move Cursor Down", InputConstants.KEY_H, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(moveCursorLeft = new KeyMapping("Move Cursor Left", InputConstants.KEY_G, "Bonobocraft"));
-        KeyBindingHelper.registerKeyBinding(moveCursorRight = new KeyMapping("Move Cursor Right", InputConstants.KEY_J, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(indicateTouchUp = new KeyMapping("Indicate Up", -1, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(indicateTouchDown = new KeyMapping("Indicate Down", -1, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(indicateTouchLeft = new KeyMapping("Indicate Left", -1, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(indicateTouchRight = new KeyMapping("Indicate Right", -1, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(moveCursorUp = new KeyMapping("Cursor Up", InputConstants.KEY_UP, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(moveCursorDown = new KeyMapping("Cursor Down", InputConstants.KEY_DOWN, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(moveCursorLeft = new KeyMapping("Cursor Left", InputConstants.KEY_LEFT, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(moveCursorRight = new KeyMapping("Cursor Right", InputConstants.KEY_RIGHT, "Bonobocraft"));
 
         ClientPlayNetworking.registerGlobalReceiver(S2CIndicatorPacket.TYPE, (packet, player, sender) -> {
             IndicatorHandlerManager.handleIndicator(packet.indicatorType(), packet.durationTicks());
         });
+        EntityRendererRegistry.register(KanziControlMain.END_CRYSTAL_SML_HITBOX, EndCrystalRenderer::new);
     }
 
     public static KanziControl get() {

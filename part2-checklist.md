@@ -8,8 +8,8 @@
 - [x] Flash screen red when taking damage
 - [x] Highlight parts of the screen to indicate what Kanzi should press
   - [x] Should be invokable through commands/datapack
-  - [x] Highlight look quadrants (controlled thru arrow keys AND commands)
-  - [ ] Highlight buttons
+  - [x] ~~Highlight look quadrants (controlled thru arrow keys AND commands)~~
+  - [ ] ~~Highlight buttons~~
   - [x] Controllable cursor to indicate to Kanzi
   - [ ] Highlight inventory slots
 - [x] Prevent Kanzi fighting the re-centering look direction
@@ -26,3 +26,8 @@
 - [x] Auto-sneak when on a 5-block or more ledge
 - [x] Don't recenter look direction when breaking block
 - [x] Compat bossbar and shift bonobo buttons below
+- [x] Enlarged end crystals
+  - [x] Only large if not inside iron bars
+  - [x] Affects hitbox
+  - [x] Affects render size
+- [x] Hide crosshair

@@ -22,17 +22,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class GameRendererMixin {
     @Shadow @Final Minecraft minecraft;
 
+    /**
+     * Render our own interaction area stuff.
+     */
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiling/ProfilerFiller;pop()V", ordinal = 0))
     private void onPostRenderHud(float tickDelta, long startTime, boolean tick, CallbackInfo ci, @Local GuiGraphics graphics) {
         if (KanziConfig.INSTANCE.instance().enabled)
             RootInteractionArea.render(graphics, minecraft.getDeltaFrameTime());
     }
 
+    /**
+     * Prevent drawing block outline if enabled.
+     */
     @ModifyReturnValue(method = "shouldRenderBlockOutline", at = @At("RETURN"))
     private boolean modifyShouldRenderBlockOutline(boolean original) {
         return original || KanziConfig.INSTANCE.instance().enabled;
     }
 
+    /**
+     * Save some matrices for rendering utilities.
+     */
     @Inject(
             method = "renderLevel",
             at = @At(

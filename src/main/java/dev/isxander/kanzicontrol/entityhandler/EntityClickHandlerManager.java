@@ -12,7 +12,7 @@ public class EntityClickHandlerManager {
     private static final Map<Class<? extends Entity>, EntityClickTaskFactory<?>> HANDLERS = new HashMap<>();
 
     static {
-        register(EndCrystal.class, crystal -> new ShootCrossbowAtEntityHandler(crystal, 0.9f));
+        register(EndCrystal.class, crystal -> new ShootCrossbowAtEntityHandler(crystal, 0.7f));
         register(EnderDragon.class, dragon -> new ShootCrossbowAtEntityHandler(dragon, 0.5f));
     }
 

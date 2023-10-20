@@ -9,6 +9,9 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 
 @Mixin(EntityType.class)
 public class EntityTypeMixin {
+    /**
+     * Modify the hitbox size of the end crystal to be 6x6 instead of 2x2.
+     */
     @ModifyArgs(
             method = "<clinit>",
             slice = @Slice(from = @At(

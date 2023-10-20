@@ -38,8 +38,7 @@ public class MouseHandlerMixin {
     }
 
     /**
-     * @author
-     * @reason
+     * Capture mouse clicks for interaction area.
      */
     @Inject(method = "onPress", at = @At("HEAD"), cancellable = true)
     public void overridePress(long window, int button, int action, int modifiers, CallbackInfo ci) {
@@ -81,12 +80,18 @@ public class MouseHandlerMixin {
         }
     }
 
+    /**
+     * Capture mouse clicks for interaction area.
+     */
     @Inject(method = "onMove", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;turnPlayer()V"))
     private void onProcessMouseMove(long window, double x, double y, CallbackInfo ci) {
         if (KanziConfig.INSTANCE.instance().enabled)
             RootInteractionArea.onMouseMove((float) x, (float) y);
     }
 
+    /**
+     * Prevent mouse from turning the player when in Kanzi mode.
+     */
     @Inject(method = "turnPlayer", at = @At("HEAD"), cancellable = true)
     public void stopTurningPlayer(CallbackInfo ci) {
         if (KanziConfig.INSTANCE.instance().enabled)

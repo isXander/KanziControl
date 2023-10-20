@@ -29,6 +29,9 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         super(world, profile);
     }
 
+    /**
+     * Detect if the health has changed since last tick and notify damage flash area.
+     */
     @Inject(method = "tick", at = @At("HEAD"))
     private void onTick(CallbackInfo ci) {
         if (!KanziConfig.INSTANCE.instance().enabled)
@@ -45,16 +48,25 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         skipTick = false;
     }
 
+    /**
+     * Allow auto-jump whilst sneaking.
+     */
     @ModifyExpressionValue(method = "canAutoJump", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/LocalPlayer;isStayingOnGroundSurface()Z"))
     private boolean shouldNotBypassSneakingCheck(boolean sneaking) {
         return !KanziConfig.INSTANCE.instance().enabled;
     }
 
+    /**
+     * Sneak when on an edge.
+     */
     @ModifyReturnValue(method = "isShiftKeyDown", at = @At("RETURN"))
     private boolean shouldBeSneaking(boolean sneaking) {
         return sneaking || isAboutToFall;
     }
 
+    /**
+     * Update the edge detection.
+     */
     @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V", shift = At.Shift.BEFORE))
     private void onMovePre(MoverType movementType, Vec3 movement, CallbackInfo ci) {
         if (KanziConfig.INSTANCE.instance().enabled) {
@@ -64,6 +76,12 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
         }
     }
 
+    /**
+     * Detects whether the movement vector will result in the player being on an edge of a >=5 block drop.
+     * @param movement
+     * @param type
+     * @return
+     */
     @Unique
     protected boolean checkWillFall(Vec3 movement, MoverType type) {
         if (!this.getAbilities().flying
@@ -79,19 +97,6 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
 
             if (this.level().clip(new ClipContext(top, bottom, ClipContext.Block.VISUAL, ClipContext.Fluid.ANY, this)).getType() == HitResult.Type.MISS)
                 return true;
-//
-//            if (xd != 0.0 && this.level().noCollision(this, this.getBoundingBox().move(xd, -minLedge, 0.0))) {
-//                return true;
-//            }
-//
-//
-//            if(zd != 0.0 && this.level().noCollision(this, this.getBoundingBox().move(0.0, -minLedge, zd))) {
-//                return true;
-//            }
-//
-//            if(xd != 0.0 && zd != 0.0 && this.level().noCollision(this, this.getBoundingBox().move(xd, -minLedge, zd))) {
-//                return true;
-//            }
         }
 
         return false;

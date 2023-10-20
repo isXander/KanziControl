@@ -86,8 +86,25 @@ public class KanziConfig {
     @SerialEntry
     public boolean ignoreBlockHighlightDepth = false;
 
+    @AutoGen(category = RENDERING, group = MISC)
+    @TickBox
     @SerialEntry
     public boolean showCursor = true;
+
+    @AutoGen(category = RENDERING, group = MISC)
+    @TickBox
+    @SerialEntry
+    public boolean largeEndCrystalRendering = false;
+
+    @AutoGen(category = RENDERING, group = MISC)
+    @TickBox
+    @SerialEntry
+    public boolean hideCrosshair = true;
+
+    @AutoGen(category = RENDERING, group = MISC)
+    @TickBox
+    @SerialEntry
+    public boolean dontThickenFog = true;
 
     @AutoGen(category = MISC)
     @MasterModSwitch

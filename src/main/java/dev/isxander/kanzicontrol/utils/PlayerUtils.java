@@ -9,6 +9,8 @@ import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class PlayerUtils {
@@ -21,6 +23,10 @@ public class PlayerUtils {
         }
 
         return -1;
+    }
+
+    public static boolean hasSlotMatching(Predicate<ItemStack> predicate) {
+        return findSlotMatching(predicate) != -1;
     }
 
     public static void swapSlots(int slot1, int slot2) {

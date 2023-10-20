@@ -7,8 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 @Mixin(Tutorial.class)
 public class TutorialMixin {
     /**
-     * @author
-     * @reason
+     * Kill tutorials completely.
      */
     @Overwrite
     public void start() {

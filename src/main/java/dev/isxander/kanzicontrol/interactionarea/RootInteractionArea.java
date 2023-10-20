@@ -41,6 +41,7 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
         );
 
         // HOTBAR
+        if (false) // disabled
         insertTop(
                 RowInteractionArea.builder()
                         .elements(Util.make(() -> {

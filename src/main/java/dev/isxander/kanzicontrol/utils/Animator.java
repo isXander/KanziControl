@@ -43,12 +43,16 @@ public final class Animator {
         private AnimationInstance next = null;
 
         public AnimationInstance(int durationTicks, UnaryOperator<Float> easingFunction) {
-            Validate.isTrue(durationTicks > 0, "durationTicks must be greater than 0");
+            Validate.isTrue(durationTicks >= 0, "durationTicks must be greater than or equal 0");
 
             this.animations = new ArrayList<>();
             this.continualAnimations = new ArrayList<>();
             this.easingFunction = easingFunction;
             this.durationTicks = durationTicks;
+
+            if (durationTicks == 0) {
+                finishThis();
+            }
         }
 
         public AnimationInstance addConsumer(Consumer<Float> consumer, float start, float end) {
@@ -86,6 +90,11 @@ public final class Animator {
 
         private void tick(float deltaTime) {
             started = true;
+
+            if (durationTicks == 0) {
+                done = true;
+                return;
+            }
 
             time += deltaTime;
             if (time > durationTicks) {
@@ -130,6 +139,7 @@ public final class Animator {
                 return true;
             });
 
+            started = true;
             done = true;
             updateConsumers();
         }

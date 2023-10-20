@@ -20,6 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ClientPacketListenerMixin {
     @Shadow @Final private Minecraft minecraft;
 
+    /**
+     * Notify our own input stuff that the player has changed.
+     * {@link TouchInput#setEnabled(boolean, LocalPlayer)} will replace the player's input.
+     */
     @Inject(method = "handleLogin", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/LocalPlayer;input:Lnet/minecraft/client/player/Input;", opcode = Opcodes.ASTORE, shift = At.Shift.AFTER))
     private void overrideNewPlayerInput(ClientboundLoginPacket packet, CallbackInfo ci) {
         if (KanziConfig.INSTANCE.instance().enabled) {
@@ -27,6 +31,10 @@ public class ClientPacketListenerMixin {
         }
     }
 
+    /**
+     * Notify our own input stuff that the player has changed.
+     * {@link TouchInput#setEnabled(boolean, LocalPlayer)} will replace the player's input.
+     */
     @Inject(method = "handleRespawn", at = @At(value = "FIELD", target = "Lnet/minecraft/client/player/LocalPlayer;input:Lnet/minecraft/client/player/Input;", opcode = Opcodes.ASTORE, shift = At.Shift.AFTER))
     private void overrideRespawnInput(ClientboundRespawnPacket packet, CallbackInfo ci, @Local(ordinal = 1) LocalPlayer newPlayer) {
         if (KanziConfig.INSTANCE.instance().enabled) {

@@ -14,6 +14,9 @@ import org.spongepowered.asm.mixin.injection.At;
 public class ChatComponentMixin {
     @Shadow @Final private Minecraft minecraft;
 
+    /**
+     * Hide the chat in Kanzi-mode to stop distractions.
+     */
     @ModifyReturnValue(method = "isChatHidden", at = @At("RETURN"))
     private boolean modifyChatHidden(boolean original) {
         // don't distract Kanzi with chat commands
