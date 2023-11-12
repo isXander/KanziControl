@@ -22,8 +22,13 @@ public final class Animator {
             animations.add(queuedAnimations.poll());
         }
 
-        animations.forEach(animation -> animation.tick(deltaTime));
-        animations.removeIf(AnimationInstance::isThisDone);
+        animations.removeIf(animation -> {
+            if (animation.isThisDone()) {
+                return true;
+            }
+            animation.tick(deltaTime);
+            return false;
+        });
     }
 
     public AnimationInstance play(AnimationInstance animation) {
@@ -31,13 +36,21 @@ public final class Animator {
         return animation;
     }
 
+    public boolean remove(AnimationInstance animation) {
+        return animations.remove(animation);
+    }
+
+    public void clearQueue() {
+        queuedAnimations.clear();
+    }
+
     public static class AnimationInstance {
         private final List<AnimationConsumer> animations;
-        private final List<ContinualConsumer> continualAnimations;
+        private final List<ContinualConsumer> deltaAnimations;
         private final UnaryOperator<Float> easingFunction;
         private final int durationTicks;
         private float time;
-        private boolean done, started;
+        private boolean done, started, queuedNext;
 
         private final List<Runnable> callbacks = new ArrayList<>();
         private AnimationInstance next = null;
@@ -46,7 +59,7 @@ public final class Animator {
             Validate.isTrue(durationTicks >= 0, "durationTicks must be greater than or equal 0");
 
             this.animations = new ArrayList<>();
-            this.continualAnimations = new ArrayList<>();
+            this.deltaAnimations = new ArrayList<>();
             this.easingFunction = easingFunction;
             this.durationTicks = durationTicks;
 
@@ -65,8 +78,8 @@ public final class Animator {
             return this;
         }
 
-        public AnimationInstance addContinualConsumer(Consumer<Float> consumer, float start, float end) {
-            continualAnimations.add(new ContinualConsumer(consumer, start, end));
+        public AnimationInstance addDeltaConsumer(Consumer<Float> consumer, float start, float end) {
+            deltaAnimations.add(new ContinualConsumer(consumer, start, end));
             return this;
         }
 
@@ -107,8 +120,10 @@ public final class Animator {
                 done = true;
                 time = durationTicks;
 
-                if (next != null)
+                if (next != null && !queuedNext) {
                     Animator.INSTANCE.queuedAnimations.add(next);
+                    queuedNext = true;
+                }
             }
 
             updateConsumers();
@@ -121,7 +136,7 @@ public final class Animator {
                 consumer.consumer.accept(value);
             });
 
-            continualAnimations.forEach(consumer -> {
+            deltaAnimations.forEach(consumer -> {
                 float value = Mth.lerp(progress, consumer.start, consumer.end);
                 consumer.consumer.accept(value - consumer.prevValue);
                 consumer.prevValue = value;

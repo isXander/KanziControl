@@ -4,6 +4,8 @@
   - [x] Hold 'use' until food is eaten
   - [x] Flash eat button on low hunger, should flash more the more urgent it is, take health into account
     - [x] Make the flash a fade
+  - [x] Prioritise best food from inventory
+  - [x] Prioritise gapples over other food if health is low
 - [ ] Audio cue on low hunger and health
 - [x] Flash screen red when taking damage
 - [x] Highlight parts of the screen to indicate what Kanzi should press
@@ -11,7 +13,7 @@
   - [x] ~~Highlight look quadrants (controlled thru arrow keys AND commands)~~
   - [ ] ~~Highlight buttons~~
   - [x] Controllable cursor to indicate to Kanzi
-  - [ ] Highlight inventory slots
+  - [ ] ~~Highlight inventory slots~~
 - [x] Prevent Kanzi fighting the re-centering look direction
 - [x] Modded food reward indicator found in the datapack last time - should hook into the indicator system
 - [x] Indicate X on failure, triggerable by keybind AND command
@@ -31,3 +33,16 @@
   - [x] Affects hitbox
   - [x] Affects render size
 - [x] Hide crosshair
+- [ ] Share button
+  - [ ] Button glows green when Kanzi is in need of sharing
+  - [x] Conditional rendering when a player is nearby
+  - [x] Look at the player smoothly and automatically
+  - [x] Emulate inventory drops from inventory
+  - [x] Conditionally drop items based on player tags
+  - [x] Throw potions at players (select 1 random potion from inv)
+- [x] Implement inventory sorting
+  - [x] Sort sword, crossbow, arrows and food into designated slots
+  - [x] Sort other items into the back of the inventory
+  - [x] Auto-equip and replace armour with better varieties
+  - [x] Auto-sorting when receiving items (/give, pickup, armour dispense)
+  - [x] Manual `/sortinventory <target>` command

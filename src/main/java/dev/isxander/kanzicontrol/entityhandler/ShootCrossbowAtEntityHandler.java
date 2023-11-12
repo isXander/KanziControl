@@ -4,7 +4,7 @@ import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.RecenterYawTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
 import dev.isxander.kanzicontrol.utils.BowAimUtils;
-import dev.isxander.kanzicontrol.utils.PlayerUtils;
+import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -22,7 +22,7 @@ public class ShootCrossbowAtEntityHandler extends AbstractEntityClickHandler<Ent
 
     @Override
     public void start() {
-        ItemStack crossbowStack = PlayerUtils.findAndSelectItemInHotbar(stack -> stack.getItem() instanceof CrossbowItem);
+        ItemStack crossbowStack = InventoryUtils.findAndSelectItemInHotbar(stack -> stack.getItem() instanceof CrossbowItem);
         if (crossbowStack == null) {
             return;
         }

@@ -4,7 +4,6 @@ import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.interactionarea.AbstractInteractionAreaContainer;
 import dev.isxander.kanzicontrol.interactionarea.InteractionArea;
-import dev.isxander.kanzicontrol.interactionarea.InteractionAreaContainer;
 import dev.isxander.kanzicontrol.utils.Animator;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
@@ -21,14 +20,14 @@ public class TouchLook extends AbstractInteractionAreaContainer<InteractionArea>
         int width = (int) (windowSize().x() / 3f);
         int height = (int) (windowSize().y() / 3f);
 
-        insertTop(new DirectionArea(0, 0, width, height, -1, -1, true)); // top left
-        insertTop(new DirectionArea(width, 0, width, height, 0, -1, true)); // top middle
-        insertTop(new DirectionArea(width * 2, 0, width, height, 1, -1, true)); // top right
-        insertTop(new DirectionArea(0, height, width, height, -1, 0, false)); // middle left
-        insertTop(new DirectionArea(width * 2, height, width, height, 1, 0, false)); // middle right
-        insertTop(new DirectionArea(0, height * 2, width, height, -1, 1, true)); // bottom left
-        insertTop(new DirectionArea(width, height * 2, width, height, 0, 1, true)); // bottom middle
-        insertTop(new DirectionArea(width * 2, height * 2, width, height, 1, 1, true)); // bottom right
+//        insertTop(new DirectionArea(0, 0, width, height, -1, -1, true)); // top left
+//        insertTop(new DirectionArea(width, 0, width, height, 0, -1, true)); // top middle
+//        insertTop(new DirectionArea(width * 2, 0, width, height, 1, -1, true)); // top right
+//        insertTop(new DirectionArea(0, height, width, height, -1, 0, false)); // middle left
+//        insertTop(new DirectionArea(width * 2, height, width, height, 1, 0, false)); // middle right
+//        insertTop(new DirectionArea(0, height * 2, width, height, -1, 1, true)); // bottom left
+//        insertTop(new DirectionArea(width, height * 2, width, height, 0, 1, true)); // bottom middle
+//        insertTop(new DirectionArea(width * 2, height * 2, width, height, 1, 1, true)); // bottom right
     }
 
     @Override
@@ -42,94 +41,85 @@ public class TouchLook extends AbstractInteractionAreaContainer<InteractionArea>
         return position.distanceSquared(windowSize.x() / 2f, windowSize.y() / 2f) > deadRadius*deadRadius;
     }
 
-    @Override
+//    @Override
+//    public boolean fingerDown(Vector2fc position) {
+//        if ((movementAnimation != null && movementAnimation.isCurrentlyPlaying()) || (resetAnimation != null && resetAnimation.isCurrentlyPlaying())) {
+//            return false;
+//        }
+//
+//        TouchInput.INSTANCE.cancelMining();
+//
+//        return super.fingerDown(position);
+//    }
+
+        @Override
     public boolean fingerDown(Vector2fc position) {
+        KanziConfig config = KanziConfig.INSTANCE.instance();
+
+        LocalPlayer player = minecraft().player;
+        Vector2f distFromCenter = distFromCenter(position);
+        double touchAngle = Math.atan2(distFromCenter.y(), distFromCenter.x());
+        Vector2f freeLookDirection = new Vector2f((float) Math.cos(touchAngle), (float) Math.sin(touchAngle));
+
         if (movementAnimation != null) {
             if (!movementAnimation.isThisDone()) {
                 return false;
             }
-
             if (resetAnimation != null && resetAnimation.isCurrentlyPlaying()) {
                 return false;
             }
-
             resetAnimation = null;
             movementAnimation = null;
         }
 
         TouchInput.INSTANCE.cancelMining();
 
-        return super.fingerDown(position);
-    }
+        float x = freeLookDirection.x();
+        float y = freeLookDirection.y();
 
-    //    @Override
-//    public boolean fingerDown(Vector2fc position) {
-//        KanziConfig config = KanziConfig.INSTANCE.instance();
-//
-//        LocalPlayer player = minecraft().player;
-//        Vector2f distFromCenter = distFromCenter(position);
-//        double touchAngle = Math.atan2(distFromCenter.y(), distFromCenter.x());
-//        Vector2f freeLookDirection = new Vector2f((float) Math.cos(touchAngle), (float) Math.sin(touchAngle));
-//
-//        if (movementAnimation != null) {
-//            if (!movementAnimation.isThisDone()) {
-//                return false;
-//            }
-//            if (resetAnimation != null && resetAnimation.isCurrentlyPlaying()) {
-//                return false;
-//            }
-//            resetAnimation = null;
-//            movementAnimation = null;
-//        }
-//
-//        TouchInput.INSTANCE.cancelMining();
-//
-//        float x = freeLookDirection.x();
-//        float y = freeLookDirection.y();
-//
-//        if (x == 0 && y == 0)
-//            return false;
-//
-//        if (Math.abs(x) > Math.abs(y)) {
-//            if (resetDelay != null && resetDelay.isCurrentlyPlaying())
-//                resetDelay.startAgain();
-//
-//            int animationTickDuration = calculateTickDuration(config.touchLookDegreesPerTap);
-//            if (animationTickDuration > 0) {
-//                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTickDuration, Animator::linear)
-//                        .addContinualConsumer(f -> player.turn(f / 0.15, 0.0), 0, config.touchLookDegreesPerTap * Math.signum(x)));
-//            }
-//        } else if (Math.abs(y) > Math.abs(x)) {
-//            if (resetDelay != null && resetDelay.isCurrentlyPlaying())
-//                resetDelay.cancelFamily();
-//
-//            int degrees = (int) (Mth.clamp(player.getXRot() + config.touchLookDegreesPerTap * Math.signum(y), -config.maxMinVerticalDegrees, config.maxMinVerticalDegrees) - player.getXRot());
-//            int animationTicks = calculateTickDuration(degrees);
-//
-//            if (animationTicks > 0) {
-//                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTicks, Animator::linear)
-//                        .addContinualConsumer(f -> player.turn(0.0, f / 0.15), 0, config.touchLookDegreesPerTap * Math.signum(y))
-//                );
-//
-//                int resetDegrees = (int) -(player.getXRot() + degrees);
-//                int resetAnimationTicks = calculateTickDuration(resetDegrees);
-//                if (resetAnimationTicks > 0) {
-//                    resetAnimation = new Animator.AnimationInstance(resetAnimationTicks, Animator::linear)
-//                            .addContinualConsumer(f -> player.turn(0.0, f / 0.15), 0, resetDegrees);
-//                    if (resetDelay != null && resetDelay.isCurrentlyPlaying()) {
-//                        resetDelay.startAgain();
-//                        resetDelay.playOnComplete(resetAnimation);
-//                        movementAnimation.andThen(resetDelay);
-//                    } else {
-//                        movementAnimation.andThen(resetDelay = new Animator.AnimationInstance((int) (config.verticalResetDelay * 20), Animator::linear)
-//                                .andThen(resetAnimation));
-//                    }
-//                }
-//            }
-//        }
-//
-//        return true;
-//    }
+        if (x == 0 && y == 0)
+            return false;
+
+        if (Math.abs(x) > Math.abs(y)) {
+            if (resetDelay != null && resetDelay.isCurrentlyPlaying())
+                resetDelay.startAgain();
+
+            int animationTickDuration = calculateTickDuration(config.touchLookDegreesPerTap);
+            if (animationTickDuration > 0) {
+                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTickDuration, Animator::linear)
+                        .addDeltaConsumer(f -> player.turn(f / 0.15, 0.0), 0, config.touchLookDegreesPerTap * Math.signum(x)));
+            }
+        } else if (Math.abs(y) > Math.abs(x)) {
+            if (resetDelay != null && resetDelay.isCurrentlyPlaying())
+                resetDelay.cancelFamily();
+
+            int degrees = (int) (Mth.clamp(player.getXRot() + config.touchLookDegreesPerTap * Math.signum(y), -config.maxMinVerticalDegrees, config.maxMinVerticalDegrees) - player.getXRot());
+            int animationTicks = calculateTickDuration(degrees);
+
+            if (animationTicks > 0) {
+                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTicks, Animator::linear)
+                        .addDeltaConsumer(f -> player.turn(0.0, f / 0.15), 0, config.touchLookDegreesPerTap * Math.signum(y))
+                );
+
+                int resetDegrees = (int) -(player.getXRot() + degrees);
+                int resetAnimationTicks = calculateTickDuration(resetDegrees);
+                if (resetAnimationTicks > 0) {
+                    resetAnimation = new Animator.AnimationInstance(resetAnimationTicks, Animator::linear)
+                            .addDeltaConsumer(f -> player.turn(0.0, f / 0.15), 0, resetDegrees);
+                    if (resetDelay != null && resetDelay.isCurrentlyPlaying()) {
+                        resetDelay.startAgain();
+                        resetDelay.playOnComplete(resetAnimation);
+                        movementAnimation.andThen(resetDelay);
+                    } else {
+                        movementAnimation.andThen(resetDelay = new Animator.AnimationInstance((int) (config.verticalResetDelay * 20), Animator::linear)
+                                .andThen(resetAnimation));
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
 
     @Override
     public void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
@@ -220,31 +210,33 @@ public class TouchLook extends AbstractInteractionAreaContainer<InteractionArea>
             KanziConfig config = KanziConfig.INSTANCE.instance();
             LocalPlayer player = minecraft().player;
 
-            restartResetDelay();
-
             int animationTickDuration = calculateTickDuration(config.touchLookDegreesPerTap);
             if (animationTickDuration > 0) {
+                int horizontalDegrees = (int) (config.touchLookDegreesPerTap * xDir);
                 int verticalDegrees = (int) (Mth.clamp(player.getXRot() + config.touchLookDegreesPerTap * yDir, -config.maxMinVerticalDegrees, config.maxMinVerticalDegrees) - player.getXRot());
 
-                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTickDuration, Animator::linear)
-                        .addContinualConsumer(f -> player.turn(f / 0.15 * xDir, 0), 0, config.touchLookDegreesPerTap)
-                        .addContinualConsumer(f -> player.turn(0, f / 0.15), 0, verticalDegrees));
+                if (horizontalDegrees == 0 && verticalDegrees == 0) {
+                    return true;
+                }
 
-                if (causeReset && verticalDegrees != 0) {
+                if (resetDelay == null) {
+                    resetDelay = new Animator.AnimationInstance((int) (config.verticalResetDelay * 20), Animator::linear);
+                } else if (movementAnimation != null) {
+                    movementAnimation.playOnComplete(null);
+                }
+
+                movementAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(animationTickDuration, Animator::linear)
+                        .addDeltaConsumer(f -> player.turn(f / 0.15, 0), 0, horizontalDegrees)
+                        .addDeltaConsumer(f -> player.turn(0, f / 0.15), 0, verticalDegrees))
+                        .playOnComplete(resetDelay);
+
+                resetDelay.startAgain();
+
+                if (verticalDegrees != 0) {
                     int resetDegrees = (int) -(player.getXRot() + verticalDegrees);
-                    int resetAnimationTicks = calculateTickDuration(resetDegrees);
-                    if (resetAnimationTicks > 0) {
-                        resetAnimation = new Animator.AnimationInstance(resetAnimationTicks, Animator::linear)
-                                .addContinualConsumer(f -> player.turn(0.0, f / 0.15), 0, resetDegrees);
-                        if (resetDelay != null && resetDelay.isCurrentlyPlaying()) {
-                            resetDelay.startAgain();
-                            resetDelay.playOnComplete(resetAnimation);
-                            movementAnimation.playOnComplete(resetDelay);
-                        } else {
-                            movementAnimation.playOnComplete(resetDelay = new Animator.AnimationInstance((int) (config.verticalResetDelay * 20), Animator::linear)
-                                    .playOnComplete(resetAnimation));
-                        }
-                    }
+                    resetAnimation = new Animator.AnimationInstance(calculateTickDuration(resetDegrees), Animator::linear)
+                            .addDeltaConsumer(f -> player.turn(0, f / 0.15), 0, resetDegrees);
+                    resetDelay.playOnComplete(resetAnimation);
                 }
             }
 

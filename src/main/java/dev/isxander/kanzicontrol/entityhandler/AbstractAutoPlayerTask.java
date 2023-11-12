@@ -1,16 +1,20 @@
 package dev.isxander.kanzicontrol.entityhandler;
 
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
 
 public abstract class AbstractAutoPlayerTask implements AutomatedPlayerTask {
+    protected final LocalPlayer player;
     private SubTask currentTask;
     private final Queue<SubTask> queuedTasks;
 
     public AbstractAutoPlayerTask() {
         this.queuedTasks = new ArrayDeque<>();
+        this.player = Minecraft.getInstance().player;
     }
 
     @Override

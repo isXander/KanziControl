@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public class RowInteractionArea extends AbstractInteractionAreaContainer<PositionableElement> implements PositionableElement {
     private final float elementPaddingHorizontal;
@@ -108,13 +109,15 @@ public class RowInteractionArea extends AbstractInteractionAreaContainer<Positio
         private AnchorPoint windowAnchor = AnchorPoint.TOP_LEFT;
         private AnchorPoint origin = AnchorPoint.TOP_LEFT;
 
-        public Builder element(PositionableElement element) {
-            elements.add(element);
+        public Builder element(PositionableElement... elements) {
+            this.elements.addAll(Arrays.asList(elements));
             return this;
         }
 
-        public Builder elements(PositionableElement... elements) {
-            this.elements.addAll(Arrays.asList(elements));
+        public Builder elementIf(boolean condition, Supplier<PositionableElement> elementSupplier) {
+            if (condition) {
+                this.elements.add(elementSupplier.get());
+            }
             return this;
         }
 

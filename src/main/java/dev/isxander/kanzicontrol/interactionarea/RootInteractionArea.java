@@ -1,8 +1,10 @@
 package dev.isxander.kanzicontrol.interactionarea;
 
+import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.debug.KanziControlDebug;
 import dev.isxander.kanzicontrol.interactionarea.elements.*;
 import dev.isxander.kanzicontrol.interactionarea.button.*;
+import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -27,12 +29,13 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
         // BUTTON ROW
         insertBelow(
                 RowInteractionArea.builder()
-                        /* JMP */ //.element(new ButtonInteractionArea(Lexigrams.JUMP, 30f, 30f, ButtonActions.JUMP, ButtonRenderPredicates.ALWAYS))
+                        /* JMP */ //.element(new ButtonInteractionArea(Lexigrams.JUMP, 32f, 32f, ButtonActions.JUMP, ButtonRenderPredicates.ALWAYS))
                         /* BRK */ //.element(new ButtonInteractionArea(Lexigrams.BREAK, 32f, 32f, ButtonActions.BREAK, ButtonRenderPredicates.ALWAYS))
-                        /* ATK */ //.element(new ButtonInteractionArea(Lexigrams.FIGHT, 30f, 30f, ButtonActions.FIGHT, ButtonRenderPredicates.ALWAYS))
+                        /* ATK */ //.element(new ButtonInteractionArea(Lexigrams.FIGHT, 32f, 32f, ButtonActions.FIGHT, ButtonRenderPredicates.ALWAYS))
                         /* USE */ //.element(new ButtonInteractionArea(Lexigrams.USE, 32f, 32f, ButtonActions.USE, ButtonRenderPredicates.ALWAYS))
-                        /* SWM */ //.element(new ButtonInteractionArea(Lexigrams.TOGGLE_SWIM_DOWN, 30f, 30f, ButtonActions.TOGGLE_SWIM_DOWN, ButtonRenderPredicates.ALWAYS))
+                        /* SWM */ //.element(new ButtonInteractionArea(Lexigrams.TOGGLE_SWIM_DOWN, 32f, 32f, ButtonActions.TOGGLE_SWIM_DOWN, ButtonRenderPredicates.ALWAYS))
                         /* EAT */ .element(new EatButtonArea(32f, 32f))
+                        .elementIf(KanziConfig.INSTANCE.instance().shareButton, () -> new ButtonInteractionArea(Lexigrams.GIVE, 32f, 32f, ButtonActions.SHARE, ButtonRenderPredicates.PLAYER_NEARBY))
                         .elementPadding(10f)
                         .elementPosition(RowInteractionArea.ElementPosition.MIDDLE)
                         .position(AnchorPoint.TOP_CENTER, 0f, -19f, AnchorPoint.TOP_CENTER)

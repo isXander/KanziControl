@@ -1,6 +1,6 @@
 package dev.isxander.kanzicontrol.entityhandler.subtasks;
 
-import dev.isxander.kanzicontrol.utils.PlayerUtils;
+import dev.isxander.kanzicontrol.utils.InventoryUtils;
 
 public class SwapSlotsTask implements SubTask {
     private final int slot1, slot2;
@@ -12,7 +12,7 @@ public class SwapSlotsTask implements SubTask {
 
     @Override
     public void start() {
-        PlayerUtils.swapSlots(slot2, slot1);
+        InventoryUtils.swapSlots(slot2, slot1);
     }
 
     @Override

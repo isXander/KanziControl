@@ -1,18 +1,14 @@
 package dev.isxander.kanzicontrol.server;
 
 import com.mojang.brigadier.arguments.IntegerArgumentType;
-import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginConnectionEvents;
-import net.fabricmc.fabric.api.networking.v1.ServerLoginNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntityDimensions;
@@ -67,12 +63,27 @@ public class KanziControlMain implements ModInitializer {
                     .then(inner));
         });
 
+        CommandRegistrationCallback.EVENT.register((dispatcher, registry, env) -> {
+            dispatcher.register(Commands.literal("sortinventory")
+                    .requires(source -> source.hasPermission(2))
+                    .then(Commands.argument("targets", EntityArgument.players())
+                            .executes(ctx -> {
+                                Collection<ServerPlayer> players = EntityArgument.getPlayers(ctx, "targets");
+                                for (ServerPlayer player : players) {
+                                    ServerPlayNetworking.send(player, new ClientboundSortInventoryPacket());
+                                }
+                                return 1;
+                            })));
+        });
+
         KanziHandshake.setupOnServer();
+
+
     }
 
     private void sendIndicator(ResourceLocation type, int duration, Collection<ServerPlayer> players) {
         for (ServerPlayer player : players) {
-            ServerPlayNetworking.send(player, new S2CIndicatorPacket(type, duration));
+            ServerPlayNetworking.send(player, new ClientboundKanziIndicatorPacket(type, duration));
         }
     }
 }

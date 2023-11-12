@@ -9,15 +9,17 @@ import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import dev.isxander.kanzicontrol.mixins.MouseHandlerAccessor;
 import dev.isxander.kanzicontrol.server.KanziControlMain;
 import dev.isxander.kanzicontrol.server.KanziHandshake;
-import dev.isxander.kanzicontrol.server.S2CIndicatorPacket;
+import dev.isxander.kanzicontrol.server.ClientboundKanziIndicatorPacket;
+import dev.isxander.kanzicontrol.server.ClientboundSortInventoryPacket;
+import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import dev.isxander.yacl3.config.v2.impl.autogen.OptionFactoryRegistry;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.KeyMapping;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EndCrystalRenderer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +41,10 @@ public class KanziControl implements ClientModInitializer {
         KanziConfig.INSTANCE.serializer().load();
 
         KanziHandshake.setupOnClient();
+
+        ClientPlayNetworking.registerGlobalReceiver(ClientboundSortInventoryPacket.TYPE, (packet, player, sender) -> {
+            Minecraft.getInstance().execute(InventoryUtils::sortInventory);
+        });
 
         ClientTickEvents.START_CLIENT_TICK.register(client -> {
             if (KanziConfig.INSTANCE.instance().enabled)
@@ -86,7 +92,7 @@ public class KanziControl implements ClientModInitializer {
         KeyBindingHelper.registerKeyBinding(moveCursorLeft = new KeyMapping("Cursor Left", InputConstants.KEY_LEFT, "Bonobocraft"));
         KeyBindingHelper.registerKeyBinding(moveCursorRight = new KeyMapping("Cursor Right", InputConstants.KEY_RIGHT, "Bonobocraft"));
 
-        ClientPlayNetworking.registerGlobalReceiver(S2CIndicatorPacket.TYPE, (packet, player, sender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(ClientboundKanziIndicatorPacket.TYPE, (packet, player, sender) -> {
             IndicatorHandlerManager.handleIndicator(packet.indicatorType(), packet.durationTicks());
         });
         EntityRendererRegistry.register(KanziControlMain.END_CRYSTAL_SML_HITBOX, EndCrystalRenderer::new);

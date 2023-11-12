@@ -1,8 +1,7 @@
 package dev.isxander.kanzicontrol.entityhandler.subtasks;
 
 import dev.isxander.kanzicontrol.entityhandler.AbstractAutoPlayerTask;
-import dev.isxander.kanzicontrol.entityhandler.AutoEatTask;
-import dev.isxander.kanzicontrol.utils.PlayerUtils;
+import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Inventory;
 
@@ -29,7 +28,7 @@ public class SelectSlotTask implements SubTask {
             inventory.selected = slot;
         } else {
             int swapSlot = inventory.getSuitableHotbarSlot();
-            PlayerUtils.swapSlots(slot, swapSlot);
+            InventoryUtils.swapSlots(slot, swapSlot);
 
             if (swapBack)
                 parentTask.queueTask(new SwapSlotsTask(swapSlot, slot));

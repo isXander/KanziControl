@@ -2,11 +2,10 @@ plugins {
     java
 
     alias(libs.plugins.loom)
-    alias(libs.plugins.loom.vineflower)
 }
 
 group = "dev.isxander"
-version = "2.15.0"
+version = "2.17.0"
 
 repositories {
     mavenCentral()
@@ -43,7 +42,7 @@ dependencies {
         include(it)
     }
 
-    include(modImplementation("com.github.0x3C50:Renderer:master-SNAPSHOT")!!)
+    include(modImplementation("com.github.0x3C50:Renderer:e5d9998655")!!)
 }
 
 tasks {

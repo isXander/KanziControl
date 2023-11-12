@@ -13,7 +13,8 @@ public final class Lexigrams {
             TOGGLE_SWIM_DOWN = renderer("swim"),
             USE = renderer("use"),
             EAT = renderer("eat"),
-            EAT_HIGHLIGHTED = renderer("eat_highlighted");
+            EAT_HIGHLIGHTED = renderer("eat_highlighted"),
+            GIVE = renderer("give");
 
     private static LexigramRenderer renderer(String lexigramId) {
         LexigramRenderer renderer = new LexigramRenderer(lexigramId);

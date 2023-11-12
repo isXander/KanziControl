@@ -113,6 +113,11 @@ public class KanziConfig {
 
     @AutoGen(category = MISC)
     @TickBox
+    @SerialEntry(comment = "Show sharing button")
+    public boolean shareButton = true;
+
+    @AutoGen(category = MISC)
+    @TickBox
     @SerialEntry
     public boolean speechEnabled = true;
 }

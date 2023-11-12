@@ -1,6 +1,6 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
-import dev.isxander.kanzicontrol.utils.PlayerUtils;
+import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
@@ -13,7 +13,6 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 public final class ButtonRenderPredicates {
     public static final Map<String, ButtonRenderPredicate> ALL = new HashMap<>();
@@ -44,9 +43,14 @@ public final class ButtonRenderPredicates {
             }),
             LOOK_AT_ENTITY = predicate("look_at_entity", ctx -> ctx.hitResult().getType() == HitResult.Type.ENTITY),
             HUNGRY = predicate("hungry", ctx -> {
-                LocalPlayer player = Minecraft.getInstance().player;
+                Minecraft minecraft = Minecraft.getInstance();
+                LocalPlayer player = minecraft.player;
                 if (player == null) return false;
-                return PlayerUtils.hasSlotMatching(stack -> stack.isEdible() && player.canEat(stack.getItem().getFoodProperties().canAlwaysEat()));
+                return player.canEat(false) && InventoryUtils.hasSlotMatching(ItemStack::isEdible);
+            }),
+            PLAYER_NEARBY = predicate("player_nearby", ctx -> {
+                LocalPlayer player = Minecraft.getInstance().player;
+                return player.level().getNearestPlayer(player.getX(), player.getY(), player.getZ(), 3, entity -> !entity.isSpectator() && !entity.equals(player)) != null;
             });
 
     private static ButtonRenderPredicate predicate(String id, ButtonRenderPredicate predicate) {

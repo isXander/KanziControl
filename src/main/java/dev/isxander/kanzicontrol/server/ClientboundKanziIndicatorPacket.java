@@ -5,13 +5,13 @@ import net.fabricmc.fabric.api.networking.v1.PacketType;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public record S2CIndicatorPacket(ResourceLocation indicatorType, int durationTicks) implements FabricPacket {
-    public static final PacketType<S2CIndicatorPacket> TYPE = PacketType.create(
+public record ClientboundKanziIndicatorPacket(ResourceLocation indicatorType, int durationTicks) implements FabricPacket {
+    public static final PacketType<ClientboundKanziIndicatorPacket> TYPE = PacketType.create(
             new ResourceLocation("kanzicontrol", "indicator_s2c"),
-            S2CIndicatorPacket::new
+            ClientboundKanziIndicatorPacket::new
     );
 
-    public S2CIndicatorPacket(FriendlyByteBuf buf) {
+    public ClientboundKanziIndicatorPacket(FriendlyByteBuf buf) {
         this(buf.readResourceLocation(), buf.readInt());
     }
 
