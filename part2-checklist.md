@@ -4,13 +4,13 @@
   - [x] Hold 'use' until food is eaten
   - [x] Flash eat button on low hunger, should flash more the more urgent it is, take health into account
     - [x] Make the flash a fade
-  - [x] Prioritise best food from inventory
+  - [x] Prioritise the best food from inventory
   - [x] Prioritise gapples over other food if health is low
 - [ ] Audio cue on low hunger and health
 - [x] Flash screen red when taking damage
 - [x] Highlight parts of the screen to indicate what Kanzi should press
   - [x] Should be invokable through commands/datapack
-  - [x] ~~Highlight look quadrants (controlled thru arrow keys AND commands)~~
+  - [x] ~~Highlight look quadrants (controlled through arrow keys AND commands)~~
   - [ ] ~~Highlight buttons~~
   - [x] Controllable cursor to indicate to Kanzi
   - [ ] ~~Highlight inventory slots~~
@@ -46,3 +46,12 @@
   - [x] Auto-equip and replace armour with better varieties
   - [x] Auto-sorting when receiving items (/give, pickup, armour dispense)
   - [x] Manual `/sortinventory <target>` command
+- [x] Tweak ender dragon pathfinding
+  - [x] Two circles around the middle of the island, one higher than the other
+- [x] Water bucket clutch button
+  - [x] Continually place press 'use item' 
+  - [x] Pick up water back into bucket
+  - [x] Make sure it doesn't break in creative
+  - [x] Conditionally render button only if falling (fallDistance?)
+- [x] Dragons breath movement priority
+  - [x] Don't trigger dragon attack touch handler if in dragon breath

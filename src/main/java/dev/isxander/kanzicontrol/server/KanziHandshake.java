@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 public class KanziHandshake {
     public static final Logger LOGGER = LoggerFactory.getLogger("Kanzi Handshake");
 
-    public static final int PROTOCOL_VERSION = 7;
+    public static final int PROTOCOL_VERSION = 8;
     public static final ResourceLocation HANDSHAKE_CHANNEL = new ResourceLocation("kanzicontrol", "handshake");
 
     public static void setupOnServer() {

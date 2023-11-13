@@ -1,8 +1,9 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
 import dev.isxander.kanzicontrol.TouchInput;
-import dev.isxander.kanzicontrol.entityhandler.AutoEatTask;
-import dev.isxander.kanzicontrol.entityhandler.ShareTaskClickHandler;
+import dev.isxander.kanzicontrol.entityhandler.tasks.AutoEatTask;
+import dev.isxander.kanzicontrol.entityhandler.tasks.ShareTaskClickHandler;
+import dev.isxander.kanzicontrol.entityhandler.tasks.WaterBucketClutchClickHandler;
 import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -26,6 +27,7 @@ public class ButtonActions {
                 LocalPlayer player = Minecraft.getInstance().player;
                 RootInteractionArea.getInstance().TOUCH_ENTITY.queueHandler(new ShareTaskClickHandler(player.level().getNearestPlayer(player.getX(), player.getY(), player.getZ(), 3, entity -> !entity.isSpectator() && !entity.equals(player))));
             }).withNarration("share")),
+            WATER_BUCKET_CLUTCH = action("clutch", ButtonAction.down(() -> RootInteractionArea.getInstance().TOUCH_ENTITY.queueHandler(new WaterBucketClutchClickHandler())).withNarration("clutch")),
             HOTBAR_SLOT_1 = action("hotbar_slot_1", ButtonAction.down(() -> minecraft.player.getInventory().selected = 0)),
             HOTBAR_SLOT_2 = action("hotbar_slot_2", ButtonAction.down(() -> minecraft.player.getInventory().selected = 1)),
             HOTBAR_SLOT_3 = action("hotbar_slot_3", ButtonAction.down(() -> minecraft.player.getInventory().selected = 2)),

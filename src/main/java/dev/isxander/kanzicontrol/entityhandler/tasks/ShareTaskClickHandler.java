@@ -1,6 +1,7 @@
-package dev.isxander.kanzicontrol.entityhandler;
+package dev.isxander.kanzicontrol.entityhandler.tasks;
 
 import dev.isxander.kanzicontrol.TouchInput;
+import dev.isxander.kanzicontrol.entityhandler.AbstractAutoPlayerTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SmoothlyLookAtTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;
@@ -25,10 +26,10 @@ public class ShareTaskClickHandler extends AbstractAutoPlayerTask {
         float prevPitch = player.getXRot();
 
         queueTask(new SmoothlyLookAtTask(entityToShareWith, 10));
-        if (entityToShareWith.getTags().contains("bonobo_needs_arrow")) {
+        if (entityToShareWith.getTags().contains("needsArrows")) {
             queueTask(new DropRandomItemsTask(stack -> stack.is(ItemTags.ARROWS), 20));
         }
-        if (entityToShareWith.getTags().contains("bonobo_needs_food")) {
+        if (entityToShareWith.getTags().contains("needsFood")) {
             queueTask(new DropRandomItemsTask(ItemStack::isEdible, 5));
         }
         if (InventoryUtils.hasSlotMatching(stack -> stack.is(Items.SPLASH_POTION))) {

@@ -28,6 +28,8 @@
   ],
   "mixins": [
     "ArmorItemMixin",
+    "DragonHoldingPatternPhaseMixin",
+    "EnderDragonMixin",
     "EntityTypeMixin",
     "GiveCommandMixin",
     "ItemEntityMixin",

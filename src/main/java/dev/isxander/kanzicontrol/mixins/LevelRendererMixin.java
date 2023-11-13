@@ -118,6 +118,6 @@ public class LevelRendererMixin {
      */
     @ModifyExpressionValue(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;shouldCreateWorldFog()Z"))
     private boolean shouldThickenFogOnBoss(boolean packetState) {
-        return packetState && (!KanziConfig.INSTANCE.instance().dontThickenFog || KanziConfig.INSTANCE.instance().enabled);
+        return packetState && (!KanziConfig.INSTANCE.instance().dontThickenFog || !KanziConfig.INSTANCE.instance().enabled);
     }
 }

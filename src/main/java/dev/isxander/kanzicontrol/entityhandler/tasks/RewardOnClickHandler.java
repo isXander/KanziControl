@@ -1,5 +1,6 @@
-package dev.isxander.kanzicontrol.entityhandler;
+package dev.isxander.kanzicontrol.entityhandler.tasks;
 
+import dev.isxander.kanzicontrol.entityhandler.AbstractEntityClickHandler;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.RecenterYawTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SleepTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;

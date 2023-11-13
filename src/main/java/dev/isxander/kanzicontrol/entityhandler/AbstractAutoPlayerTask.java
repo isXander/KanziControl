@@ -47,6 +47,11 @@ public abstract class AbstractAutoPlayerTask implements AutomatedPlayerTask {
     }
 
     @Override
+    public boolean shouldStart() {
+        return true;
+    }
+
+    @Override
     public void finish() {
 
     }

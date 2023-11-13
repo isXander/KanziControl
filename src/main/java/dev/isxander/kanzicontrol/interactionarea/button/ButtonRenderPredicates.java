@@ -51,6 +51,10 @@ public final class ButtonRenderPredicates {
             PLAYER_NEARBY = predicate("player_nearby", ctx -> {
                 LocalPlayer player = Minecraft.getInstance().player;
                 return player.level().getNearestPlayer(player.getX(), player.getY(), player.getZ(), 3, entity -> !entity.isSpectator() && !entity.equals(player)) != null;
+            }),
+            FALLING = predicate("falling", ctx -> {
+                LocalPlayer player = Minecraft.getInstance().player;
+                return player.fallDistance > 2.5;
             });
 
     private static ButtonRenderPredicate predicate(String id, ButtonRenderPredicate predicate) {

@@ -1,6 +1,7 @@
-package dev.isxander.kanzicontrol.entityhandler;
+package dev.isxander.kanzicontrol.entityhandler.tasks;
 
 import dev.isxander.kanzicontrol.TouchInput;
+import dev.isxander.kanzicontrol.entityhandler.AbstractAutoPlayerTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SelectSlotTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;

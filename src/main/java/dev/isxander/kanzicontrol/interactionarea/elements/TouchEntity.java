@@ -41,7 +41,7 @@ public class TouchEntity implements InteractionArea {
         EntityHitResult entityHit = (EntityHitResult) hitResult;
         Optional<AutomatedPlayerTask> handler = EntityClickHandlerManager.create(entityHit.getEntity());
 
-        if (handler.isEmpty())
+        if (handler.isEmpty() || !handler.get().shouldStart())
             return false;
 
         queueHandler(handler.get());
