@@ -31,10 +31,6 @@ public class IndicatorHandlerManager {
             RootInteractionArea.getInstance().SCREEN_DAMAGE_FLASH.indicateDamage();
             return true;
         });
-        register("walk", duration -> {
-            RootInteractionArea.getInstance().TOUCH_WALK.indicate(duration);
-            return true;
-        });
         register("success", duration -> {
             RootInteractionArea.getInstance().INDICATOR_TEXTURE.indicate(IndicatorTextureArea.Type.CHECK, duration);
             return true;

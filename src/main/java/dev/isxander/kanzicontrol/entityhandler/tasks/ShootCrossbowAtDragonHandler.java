@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.entityhandler.tasks;
 
+import dev.isxander.kanzicontrol.server.KanziControlMain;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 
 public class ShootCrossbowAtDragonHandler extends ShootCrossbowAtEntityHandler {
@@ -9,6 +10,6 @@ public class ShootCrossbowAtDragonHandler extends ShootCrossbowAtEntityHandler {
 
     @Override
     public boolean shouldStart() {
-        return !player.getTags().contains("inDragonsBreath");
+        return !player.hasEffect(KanziControlMain.DRAGON_BREATH_EFFECT) && super.shouldStart();
     }
 }

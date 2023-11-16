@@ -1,11 +1,10 @@
 plugins {
     java
-
     alias(libs.plugins.loom)
 }
 
 group = "dev.isxander"
-version = "2.18.0"
+version = "2.20.2"
 
 repositories {
     mavenCentral()

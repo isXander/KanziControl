@@ -3,6 +3,7 @@ package dev.isxander.kanzicontrol.config;
 import dev.isxander.yacl3.config.v2.api.ConfigClassHandler;
 import dev.isxander.yacl3.config.v2.api.SerialEntry;
 import dev.isxander.yacl3.config.v2.api.autogen.*;
+import dev.isxander.yacl3.config.v2.api.autogen.Boolean;
 import dev.isxander.yacl3.config.v2.api.serializer.GsonConfigSerializerBuilder;
 import dev.isxander.yacl3.gui.ValueFormatters;
 import net.fabricmc.loader.api.FabricLoader;
@@ -28,6 +29,7 @@ public class KanziConfig {
     private static final String WALKING = "walking";
     private static final String RENDERING = "rendering";
     private static final String BLOCK_OVERLAY = "block_overlay";
+    private static final String HELPERS = "helpers";
     private static final String MISC = "misc";
 
     private static final String FMT_DEGREES = "kanzicontrol.fmt.degrees";
@@ -57,6 +59,11 @@ public class KanziConfig {
     @FormatTranslation(FMT_DEGREES)
     @SerialEntry
     public int maxMinVerticalDegrees = 60;
+
+    @AutoGen(category = TOUCH_CONTROLS, group = LOOKING)
+    @TickBox
+    @SerialEntry
+    public boolean allowDiagonalLooking = true;
 
 
     @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
@@ -105,6 +112,11 @@ public class KanziConfig {
     @TickBox
     @SerialEntry
     public boolean dontThickenFog = true;
+
+    @AutoGen(category = HELPERS)
+    @TickBox
+    @SerialEntry
+    public boolean inventorySorting = true;
 
     @AutoGen(category = MISC)
     @MasterModSwitch

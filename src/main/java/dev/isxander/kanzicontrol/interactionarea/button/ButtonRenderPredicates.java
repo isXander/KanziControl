@@ -1,10 +1,14 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
+import dev.isxander.kanzicontrol.utils.ClientTagHolder;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.state.pattern.BlockInWorld;
@@ -13,6 +17,7 @@ import net.minecraft.world.phys.HitResult;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public final class ButtonRenderPredicates {
     public static final Map<String, ButtonRenderPredicate> ALL = new HashMap<>();
@@ -51,6 +56,22 @@ public final class ButtonRenderPredicates {
             PLAYER_NEARBY = predicate("player_nearby", ctx -> {
                 LocalPlayer player = Minecraft.getInstance().player;
                 return player.level().getNearestPlayer(player.getX(), player.getY(), player.getZ(), 3, entity -> !entity.isSpectator() && !entity.equals(player)) != null;
+            }),
+            PLAYER_NEARBY_SHARING = predicate("player_nearby_sharing", ctx -> {
+                LocalPlayer localPlayer = Minecraft.getInstance().player;
+                return localPlayer.level().getNearestPlayer(
+                        localPlayer.getX(), localPlayer.getY(), localPlayer.getZ(),
+                        3,
+                        entity -> {
+                            if (entity.equals(localPlayer)) return false;
+                            if (entity instanceof Player player) {
+                                Set<String> tags = ClientTagHolder.getClientTags(player);
+                                return (tags.contains("needsFood") && InventoryUtils.hasSlotMatching(ItemStack::isEdible))
+                                        || (tags.contains("needsArrows") && InventoryUtils.hasSlotMatching(stack -> stack.is(ItemTags.ARROWS)));
+                            }
+                            return false;
+                        }
+                ) != null;
             }),
             FALLING = predicate("falling", ctx -> {
                 LocalPlayer player = Minecraft.getInstance().player;

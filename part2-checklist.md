@@ -46,6 +46,7 @@
   - [x] Auto-equip and replace armour with better varieties
   - [x] Auto-sorting when receiving items (/give, pickup, armour dispense)
   - [x] Manual `/sortinventory <target>` command
+  - [x] Toggleable
 - [x] Tweak ender dragon pathfinding
   - [x] Two circles around the middle of the island, one higher than the other
 - [x] Water bucket clutch button
@@ -55,3 +56,23 @@
   - [x] Conditionally render button only if falling (fallDistance?)
 - [x] Dragons breath movement priority
   - [x] Don't trigger dragon attack touch handler if in dragon breath
+- [x] Slightly lower natural pitch to prevent looking at enderman (-15deg)
+- [x] Stare at dragon when dying
+- [x] Don't allow shooting if dragon is perching
+- [x] Reduce enderman spawn rate
+- [x] Fix crash when loading crossbow with no arrows available
+- [x] ~~NBT-controlled bed respawn yaw~~
+- [x] Diagonal touch-look
+- [x] Camera should reset after a certain amount of time regardless of panning
+- [x] Fix camera doing a spin when auto-looking at a spot
+- [x] Fix share button rendering
+- [x] `/dragon` control command
+  - [x] Charge into player
+  - [x] Initiate dragon perch
+  - [x] Stop dragon perch
+  - [x] Initiate fireball phase
+  - [x] Shoot fireball at player from dragon
+  - [x] Respawn dragon fight
+  - [x] Start dying animation
+- [x] `/clienttag` command
+  - Like /tag but they get sent to clients for share button stuff

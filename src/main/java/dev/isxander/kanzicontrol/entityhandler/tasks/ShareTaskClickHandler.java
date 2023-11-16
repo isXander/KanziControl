@@ -4,19 +4,21 @@ import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.entityhandler.AbstractAutoPlayerTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SmoothlyLookAtTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
+import dev.isxander.kanzicontrol.utils.ClientTagHolder;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.util.function.Predicate;
 
 public class ShareTaskClickHandler extends AbstractAutoPlayerTask {
-    private final Entity entityToShareWith;
+    private final Player entityToShareWith;
 
-    public ShareTaskClickHandler(Entity entityToShareWith) {
+    public ShareTaskClickHandler(Player entityToShareWith) {
         this.entityToShareWith = entityToShareWith;
     }
 
@@ -26,10 +28,10 @@ public class ShareTaskClickHandler extends AbstractAutoPlayerTask {
         float prevPitch = player.getXRot();
 
         queueTask(new SmoothlyLookAtTask(entityToShareWith, 10));
-        if (entityToShareWith.getTags().contains("needsArrows")) {
+        if (ClientTagHolder.getClientTags(entityToShareWith).contains("needsArrows")) {
             queueTask(new DropRandomItemsTask(stack -> stack.is(ItemTags.ARROWS), 20));
         }
-        if (entityToShareWith.getTags().contains("needsFood")) {
+        if (ClientTagHolder.getClientTags(entityToShareWith).contains("needsFood")) {
             queueTask(new DropRandomItemsTask(ItemStack::isEdible, 5));
         }
         if (InventoryUtils.hasSlotMatching(stack -> stack.is(Items.SPLASH_POTION))) {
@@ -86,13 +88,11 @@ public class ShareTaskClickHandler extends AbstractAutoPlayerTask {
             prevHotbarSlot = player.getInventory().selected;
             if (potionSlot < 0 || potionSlot >= 9) {
                 bestHotbarSlot = player.getInventory().getSuitableHotbarSlot();
-                InventoryUtils.swapSlots(potionSlot, bestHotbarSlot);
+                InventoryUtils.swapSlots2(potionSlot, bestHotbarSlot);
             } else {
                 bestHotbarSlot = potionSlot;
                 InventoryUtils.selectHotbarSlotNow(bestHotbarSlot);
             }
-
-            TouchInput.INSTANCE.startUseItem();
 
             thrown = true;
         }

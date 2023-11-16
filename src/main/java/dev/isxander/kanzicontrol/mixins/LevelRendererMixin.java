@@ -8,6 +8,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import dev.isxander.kanzicontrol.blockhighlight.BlockHighlightRenderTypes;
 import dev.isxander.kanzicontrol.config.KanziConfig;
+import dev.isxander.kanzicontrol.entityhandler.tasks.WatchDragonDeathHandler;
+import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -28,12 +30,15 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
 
@@ -119,5 +124,12 @@ public class LevelRendererMixin {
     @ModifyExpressionValue(method = "renderLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/BossHealthOverlay;shouldCreateWorldFog()Z"))
     private boolean shouldThickenFogOnBoss(boolean packetState) {
         return packetState && (!KanziConfig.INSTANCE.instance().dontThickenFog || !KanziConfig.INSTANCE.instance().enabled);
+    }
+
+    @Inject(method = "globalLevelEvent", at = @At(value = "FIELD", target = "Lnet/minecraft/sounds/SoundEvents;ENDER_DRAGON_DEATH:Lnet/minecraft/sounds/SoundEvent;", opcode = Opcodes.GETSTATIC))
+    private void onDragonDeath(int eventId, BlockPos pos, int data, CallbackInfo ci) {
+        if (KanziConfig.INSTANCE.instance().enabled) {
+            RootInteractionArea.getInstance().TOUCH_ENTITY.queueHandler(new WatchDragonDeathHandler());
+        }
     }
 }

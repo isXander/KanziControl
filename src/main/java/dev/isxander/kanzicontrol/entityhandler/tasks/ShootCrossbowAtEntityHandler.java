@@ -7,10 +7,12 @@ import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
 import dev.isxander.kanzicontrol.utils.BowAimUtils;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import org.apache.commons.lang3.Validate;
 
 public class ShootCrossbowAtEntityHandler extends AbstractEntityClickHandler<Entity> {
@@ -19,6 +21,11 @@ public class ShootCrossbowAtEntityHandler extends AbstractEntityClickHandler<Ent
     public ShootCrossbowAtEntityHandler(Entity entity, float heightAim) {
         super(entity);
         this.heightAim = heightAim;
+    }
+
+    @Override
+    public boolean shouldStart() {
+        return InventoryUtils.hasSlotMatching(stack -> stack.is(Items.ARROW));
     }
 
     @Override

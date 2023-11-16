@@ -1,10 +1,17 @@
 package dev.isxander.kanzicontrol.mixins;
 
+import dev.isxander.kanzicontrol.server.KanziControlMain;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
+import net.minecraft.world.entity.boss.enderdragon.phases.AbstractDragonSittingPhase;
+import net.minecraft.world.entity.boss.enderdragon.phases.DragonPhaseInstance;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.pathfinder.Node;
@@ -12,6 +19,12 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.List;
 
 @Mixin(EnderDragon.class)
 public abstract class EnderDragonMixin extends Mob {
@@ -59,7 +72,7 @@ public abstract class EnderDragonMixin extends Mob {
                     x = Mth.floor(radius * Mth.cos(2 * (-Mth.PI + Mth.PI / 12 * (i - 12))));
                     z = Mth.floor(radius * Mth.sin(2 * (-Mth.PI + Mth.PI / 12 * (i - 12))));
 
-                    extraY += 5;
+                    extraY += 15;
                 }
 
                 // prevent dragon pathfinding into the void when not over land
@@ -68,8 +81,6 @@ public abstract class EnderDragonMixin extends Mob {
                         this.level().getHeightmapPos(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, new BlockPos(x, 0, z)).getY() + extraY
                 );
                 this.nodes[i] = new Node(x, y, z);
-
-                level().setBlockAndUpdate(new BlockPos(x, y, z), net.minecraft.world.level.block.Blocks.STONE.defaultBlockState());
             }
 
             // assuming the first 12 nodes form a large circle
@@ -92,5 +103,21 @@ public abstract class EnderDragonMixin extends Mob {
         }
 
         return this.findClosestNode(this.getX(), this.getY(), this.getZ());
+    }
+
+    @Redirect(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/boss/enderdragon/phases/DragonPhaseInstance;doServerTick()V"))
+    private void onServerTickPhase(DragonPhaseInstance instance) {
+        instance.doServerTick();
+
+        if (instance instanceof AbstractDragonSittingPhase && tickCount % 20 == 0) {
+            List<Player> players = level().getNearbyPlayers(
+                    TargetingConditions.forNonCombat(),
+                    this,
+                    this.getBoundingBox().inflate(64.0)
+            );
+            for (Player p : players) {
+                p.addEffect(new MobEffectInstance(KanziControlMain.DRAGON_BREATH_EFFECT, 25, 0, false, false));
+            }
+        }
     }
 }

@@ -3,7 +3,7 @@ package dev.isxander.kanzicontrol.mixins;
 import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
-import dev.isxander.kanzicontrol.interactionarea.elements.TouchLook;
+import dev.isxander.kanzicontrol.interactionarea.elements.TouchInputArea;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -31,7 +31,7 @@ public class MultiPlayerGameModeMixin {
      */
     @Inject(method = "continueDestroyBlock", at = @At("HEAD"))
     private void preventRecentering(BlockPos pos, Direction direction, CallbackInfoReturnable<Boolean> cir) {
-        TouchLook touchLook = RootInteractionArea.getInstance().TOUCH_LOOK;
-        if (touchLook != null) touchLook.restartResetDelay();
+        TouchInputArea touchInputArea = RootInteractionArea.getInstance().TOUCH_LOOK;
+        if (touchInputArea != null) touchInputArea.restartResetDelay();
     }
 }

@@ -4,7 +4,6 @@ import dev.isxander.kanzicontrol.config.KanziConfig;
 import dev.isxander.kanzicontrol.debug.KanziControlDebug;
 import dev.isxander.kanzicontrol.interactionarea.elements.*;
 import dev.isxander.kanzicontrol.interactionarea.button.*;
-import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -18,16 +17,15 @@ import static dev.isxander.kanzicontrol.utils.RenderUtils.scaledFingerPosition;
 public class RootInteractionArea extends AbstractInteractionAreaContainer<InteractionArea> {
     private static RootInteractionArea instance = new RootInteractionArea();
 
-    public final TouchLook TOUCH_LOOK = insertBottom(new TouchLook());
-    public final TouchWalk TOUCH_WALK = insertAbove(new TouchWalk(), TOUCH_LOOK);
+    public final TouchInputArea TOUCH_LOOK = insertBottom(new TouchInputArea());
     public final ScreenDamageFlashArea SCREEN_DAMAGE_FLASH = insertTop(new ScreenDamageFlashArea());
     public final IndicatorTextureArea INDICATOR_TEXTURE = insertTop(new IndicatorTextureArea());
     public final CursorDisplayArea CURSOR_DISPLAY = insertTop(new CursorDisplayArea());
-    public final TouchEntity TOUCH_ENTITY = insertTop(new TouchEntity());
+    public final TouchEntity TOUCH_ENTITY;
 
     private RootInteractionArea() {
         // BUTTON ROW
-        insertBelow(
+        RowInteractionArea buttonRow = insertBelow(
                 RowInteractionArea.builder()
                         /* JMP */ //.element(new ButtonInteractionArea(Lexigrams.JUMP, 32f, 32f, ButtonActions.JUMP, ButtonRenderPredicates.ALWAYS))
                         /* BRK */ //.element(new ButtonInteractionArea(Lexigrams.BREAK, 32f, 32f, ButtonActions.BREAK, ButtonRenderPredicates.ALWAYS))
@@ -35,14 +33,16 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
                         /* USE */ //.element(new ButtonInteractionArea(Lexigrams.USE, 32f, 32f, ButtonActions.USE, ButtonRenderPredicates.ALWAYS))
                         /* SWM */ //.element(new ButtonInteractionArea(Lexigrams.TOGGLE_SWIM_DOWN, 32f, 32f, ButtonActions.TOGGLE_SWIM_DOWN, ButtonRenderPredicates.ALWAYS))
                         /* EAT */ .element(new EatButtonArea(32f, 32f))
-                        .elementIf(KanziConfig.INSTANCE.instance().shareButton, () -> new ButtonInteractionArea(Lexigrams.GIVE, 32f, 32f, ButtonActions.SHARE, ButtonRenderPredicates.PLAYER_NEARBY))
-                        .element(new ButtonInteractionArea(new SolidColorRenderer(-1), 32f, 32f, ButtonActions.WATER_BUCKET_CLUTCH, ButtonRenderPredicates.FALLING))
+                        /* GVE */ .elementIf(KanziConfig.INSTANCE.instance().shareButton, () -> new ButtonInteractionArea(Lexigrams.GIVE, 32f, 32f, ButtonActions.SHARE, ButtonRenderPredicates.PLAYER_NEARBY_SHARING))
+                        /* CLH */ .element(new ButtonInteractionArea(Lexigrams.CLUTCH, 32f, 32f, ButtonActions.WATER_BUCKET_CLUTCH, ButtonRenderPredicates.FALLING))
                         .elementPadding(10f)
                         .elementPosition(RowInteractionArea.ElementPosition.MIDDLE)
                         .position(AnchorPoint.TOP_CENTER, 0f, -19f, AnchorPoint.TOP_CENTER)
                         .build(),
                 CURSOR_DISPLAY
         );
+
+        TOUCH_ENTITY = insertBelow(new TouchEntity(), buttonRow);
 
         // HOTBAR
         if (false) // disabled

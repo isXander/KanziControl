@@ -14,7 +14,8 @@ public final class Lexigrams {
             USE = renderer("use"),
             EAT = renderer("eat"),
             EAT_HIGHLIGHTED = renderer("eat_highlighted"),
-            GIVE = renderer("give");
+            GIVE = renderer("give"),
+            CLUTCH = renderer("clutch");
 
     private static LexigramRenderer renderer(String lexigramId) {
         LexigramRenderer renderer = new LexigramRenderer(lexigramId);

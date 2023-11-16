@@ -104,8 +104,10 @@ public class InventoryUtils {
 
     public static void selectHotbarSlotNow(int slot) {
         LocalPlayer player = Minecraft.getInstance().player;
+        if (player.getInventory().selected == slot) return;
+
         player.getInventory().selected = slot;
-        player.connection.send(new ServerboundSetCarriedItemPacket(slot));
+        notifySelectedHotbarSlotNow();
     }
 
     public static void notifySelectedHotbarSlotNow() {
@@ -135,6 +137,8 @@ public class InventoryUtils {
      * This works regardless if either slot is empty or not.
      */
     public static void swapSlots2(int slot1, int slot2) {
+        if (slot1 == slot2) return;
+
         Minecraft minecraft = Minecraft.getInstance();
 
         int serverSlot1 = convertClientToServerSlot(slot1);
@@ -148,42 +152,39 @@ public class InventoryUtils {
     }
 
     public static void sortInventory() {
-        Player player = Minecraft.getInstance().player;
-        Inventory inventory = player.getInventory();
-
         int swordSlot = 0;
         int crossbowSlot = 1;
         int arrowSlot = 2;
         int foodSlotStart = 3;
-        int foodSlotEnd = 8;
+        int foodSlotEnd = 7;
+        int waterBucketSlot = 8;
 
-        Set<Integer> sortedSlots = new HashSet<>();
         for (int i = 0; i < 36; i++) {
-            ItemStack stack = inventory.items.get(i);
-            System.out.println("stack#" + i + ": " + stack.getItem().getDescriptionId());
+            ItemStack stack = inventory().getItem(i);
 
             if (stack.is(ItemTags.SWORDS)) {
                 if (i != swordSlot) {
-                    swapOrMerge(stack, i, inventory.items.get(swordSlot), swordSlot);
+                    swapOrMerge(stack, i, inventory().getItem(swordSlot), swordSlot);
                 }
-                sortedSlots.add(swordSlot);
             } else if (stack.is(Items.CROSSBOW)) {
                 if (i != crossbowSlot) {
-                    swapOrMerge(stack, i, inventory.items.get(crossbowSlot), crossbowSlot);
+                    swapOrMerge(stack, i, inventory().getItem(crossbowSlot), crossbowSlot);
                 }
-                sortedSlots.add(crossbowSlot);
             } else if (stack.is(ItemTags.ARROWS)) {
                 if (i != arrowSlot) {
-                    System.out.println("arrowSlot: " + i);
-                    swapOrMerge(stack, i, inventory.items.get(arrowSlot), arrowSlot);
+                    swapOrMerge(stack, i, inventory().getItem(arrowSlot), arrowSlot);
                 }
-                sortedSlots.add(arrowSlot);
+            } else if (stack.is(Items.WATER_BUCKET) || stack.is(Items.BUCKET)) {
+                ItemStack desiredSlotStack = inventory().getItem(waterBucketSlot);
+                if (i != waterBucketSlot && !desiredSlotStack.is(Items.WATER_BUCKET)) {
+                    swapSlots2(i, waterBucketSlot);
+                }
             } else if (stack.isEdible()) {
                 if (i < foodSlotStart || i > foodSlotEnd) {
                     int foodSlot = -1;
                     for (int j = foodSlotStart; j <= foodSlotEnd; j++) {
-                        ItemStack foodStack = inventory.items.get(j);
-                        if (inventory.items.get(j).isEmpty() || (ItemStack.isSameItemSameTags(stack, foodStack) && foodStack.getCount() + stack.getCount() <= foodStack.getMaxStackSize())) {
+                        ItemStack foodStack = inventory().getItem(j);
+                        if (inventory().getItem(j).isEmpty() || (ItemStack.isSameItemSameTags(stack, foodStack) && foodStack.getCount() + stack.getCount() <= foodStack.getMaxStackSize())) {
                             foodSlot = j;
                             break;
                         }
@@ -194,7 +195,7 @@ public class InventoryUtils {
                     }
 
                     if (foodSlot != -1) {
-                        swapOrMerge(stack, i, inventory.items.get(foodSlot), foodSlot);
+                        swapOrMerge(stack, i, inventory().getItem(foodSlot), foodSlot);
                     }
                 }
             } else if (stack.getItem() instanceof ArmorItem armorItem) {
@@ -207,7 +208,7 @@ public class InventoryUtils {
                 };
 
                 if (slotToSwitch != -1) {
-                    ItemStack armorStack = inventory.getItem(slotToSwitch);
+                    ItemStack armorStack = inventory().getItem(slotToSwitch);
                     if (armorStack.isEmpty() || armorStack.getItem() instanceof ArmorItem currentArmor && currentArmor.getDefense() < armorItem.getDefense()) {
                         swapSlots2(i, slotToSwitch);
                     }
@@ -215,8 +216,7 @@ public class InventoryUtils {
             } else if (!stack.isEmpty()) {
                 int emptySlot = findSlotMatching(s -> isMergeable(stack, s), true);
                 if (emptySlot != -1) {
-                    System.out.println("emptySlot: " + emptySlot);
-                    swapOrMerge(inventory.items.get(i), i, inventory.items.get(emptySlot), emptySlot);
+                    swapOrMerge(inventory().getItem(i), i, inventory().getItem(emptySlot), emptySlot);
                 }
             }
         }
@@ -228,7 +228,7 @@ public class InventoryUtils {
         } else if (isMergeable(stackFrom, stackInto)) {
             mergeSlots(slotInto, slotFrom);
         } else {
-            System.out.println("swapOrMerge: failed to %s -> %s".formatted(slotFrom, slotInto));
+            System.out.printf("swapOrMerge: failed to %s -> %s%n", slotFrom, slotInto);
         }
     }
 
@@ -246,5 +246,13 @@ public class InventoryUtils {
         if (slot == 40)
             return 45;
         throw new IllegalArgumentException();
+    }
+
+    private static LocalPlayer player() {
+        return Minecraft.getInstance().player;
+    }
+
+    private static Inventory inventory() {
+        return player().getInventory();
     }
 }

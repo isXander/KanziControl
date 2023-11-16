@@ -26,8 +26,15 @@ public class SmoothlyLookAtTask implements SubTask {
         double deltaY = pos.y - player.getY();
         double deltaZ = pos.z - player.getZ();
         double hDist = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-        this.yaw = Mth.wrapDegrees((float) (Mth.atan2(deltaZ, deltaX) * 180f / Mth.PI) - 90f);
-        this.pitch = Mth.wrapDegrees((float) (-(Mth.atan2(deltaY, hDist) * 180f / Mth.PI)));
+
+        float yaw = (float) (Mth.atan2(deltaZ, deltaX) * 180f / Mth.PI) - 90f;
+        float pitch = (float) (-(Mth.atan2(deltaY, hDist) * 180f / Mth.PI));
+
+        if (Math.abs(yaw - player.getYRot()) > 180f) {
+            yaw += 360f;
+        }
+        this.yaw = yaw;
+        this.pitch = pitch;
 
         this.durationTicks = durationTicks;
     }

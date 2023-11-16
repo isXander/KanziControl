@@ -28,11 +28,14 @@
   ],
   "mixins": [
     "ArmorItemMixin",
+    "DragonFireballMixin",
     "DragonHoldingPatternPhaseMixin",
+    "EndDragonFightMixin",
     "EnderDragonMixin",
     "EntityTypeMixin",
     "GiveCommandMixin",
     "ItemEntityMixin",
+    "PlayerMixin",
     "SpikeCacheLoaderMixin",
     "SpikeFeatureMixin"
   ]
