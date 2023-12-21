@@ -24,6 +24,7 @@ public class ClientTagCommand {
                                             String tag = StringArgumentType.getString(ctx, "tag");
 
                                             sendPackets(
+                                                    ctx.getSource(),
                                                     players,
                                                     tag,
                                                     ClientboundSetClientTagPacket.Action.ADD
@@ -42,6 +43,7 @@ public class ClientTagCommand {
                                             String tag = StringArgumentType.getString(ctx, "tag");
 
                                             sendPackets(
+                                                    ctx.getSource(),
                                                     players,
                                                     tag,
                                                     ClientboundSetClientTagPacket.Action.REMOVE
@@ -57,9 +59,11 @@ public class ClientTagCommand {
         );
     }
 
-    private static void sendPackets(Collection<ServerPlayer> players, String tag, ClientboundSetClientTagPacket.Action action) {
-        for (ServerPlayer player : players) {
-            ServerPlayNetworking.send(player, new ClientboundSetClientTagPacket(action, tag, player.getId()));
+    private static void sendPackets(CommandSourceStack src, Collection<ServerPlayer> targets, String tag, ClientboundSetClientTagPacket.Action action) {
+        for (ServerPlayer player : src.getLevel().players()) {
+            for (ServerPlayer target : targets) {
+                ServerPlayNetworking.send(player, new ClientboundSetClientTagPacket(action, tag, target.getId()));
+            }
         }
     }
 }

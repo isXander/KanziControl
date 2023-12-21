@@ -82,14 +82,15 @@ public class KanziControl implements ClientModInitializer {
     }
 
     private void tick(Minecraft client) {
-        if (KanziConfig.INSTANCE.instance().enabled)
+        if (KanziConfig.INSTANCE.instance().enabled) {
             RootInteractionArea.tick();
+        }
 
         while (toggleKey.consumeClick()) {
             boolean nowEnabled = KanziConfig.INSTANCE.instance().enabled = !KanziConfig.INSTANCE.instance().enabled;
 
             ((MouseHandlerAccessor) client.mouseHandler).setMouseGrabbed(false);
-            client.mouseHandler.grabMouse(); // the mixin will handle proper mouse grabbing
+            client.mouseHandler.grabMouse();
 
             TouchInput.INSTANCE.setEnabled(nowEnabled, client.player);
         }
@@ -97,12 +98,15 @@ public class KanziControl implements ClientModInitializer {
         while (indicateTouchUp.consumeClick()) {
             RootInteractionArea.getInstance().TOUCH_LOOK.indicateUp(100);
         }
+
         while (indicateTouchDown.consumeClick()) {
             RootInteractionArea.getInstance().TOUCH_LOOK.indicateDown(100);
         }
+
         while (indicateTouchLeft.consumeClick()) {
             RootInteractionArea.getInstance().TOUCH_LOOK.indicateLeft(100);
         }
+
         while (indicateTouchRight.consumeClick()) {
             RootInteractionArea.getInstance().TOUCH_LOOK.indicateRight(100);
         }
@@ -112,7 +116,7 @@ public class KanziControl implements ClientModInitializer {
         if (moveCursorDown.isDown()) y++;
         if (moveCursorLeft.isDown()) x--;
         if (moveCursorRight.isDown()) x++;
-        if (x != 0 || y != 0) {
+        if (x != 0 && y != 0) {
             RootInteractionArea.getInstance().CURSOR_DISPLAY.moveCursor(x * 10, y * 10);
         }
     }

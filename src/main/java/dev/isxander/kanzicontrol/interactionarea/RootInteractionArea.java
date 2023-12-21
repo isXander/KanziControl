@@ -33,7 +33,15 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
                         /* USE */ //.element(new ButtonInteractionArea(Lexigrams.USE, 32f, 32f, ButtonActions.USE, ButtonRenderPredicates.ALWAYS))
                         /* SWM */ //.element(new ButtonInteractionArea(Lexigrams.TOGGLE_SWIM_DOWN, 32f, 32f, ButtonActions.TOGGLE_SWIM_DOWN, ButtonRenderPredicates.ALWAYS))
                         /* EAT */ .element(new EatButtonArea(32f, 32f))
-                        /* GVE */ .elementIf(KanziConfig.INSTANCE.instance().shareButton, () -> new ButtonInteractionArea(Lexigrams.GIVE, 32f, 32f, ButtonActions.SHARE, ButtonRenderPredicates.PLAYER_NEARBY_SHARING))
+                        /* GVE */ .elementIf(
+                                KanziConfig.INSTANCE.instance().shareButton,
+                                () -> new ButtonInteractionArea(
+                                        Lexigrams.GIVE,
+                                        32f, 32f,
+                                        ButtonActions.SHARE,
+                                        ButtonRenderPredicates.PLAYER_NEARBY_SHARING
+                                )
+                        )
                         /* CLH */ .element(new ButtonInteractionArea(Lexigrams.CLUTCH, 32f, 32f, ButtonActions.WATER_BUCKET_CLUTCH, ButtonRenderPredicates.FALLING))
                         .elementPadding(10f)
                         .elementPosition(RowInteractionArea.ElementPosition.MIDDLE)

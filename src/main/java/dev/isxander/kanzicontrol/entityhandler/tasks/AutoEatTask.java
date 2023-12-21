@@ -1,9 +1,8 @@
 package dev.isxander.kanzicontrol.entityhandler.tasks;
 
-import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.entityhandler.AbstractAutoPlayerTask;
+import dev.isxander.kanzicontrol.entityhandler.subtasks.EatTask;
 import dev.isxander.kanzicontrol.entityhandler.subtasks.SelectSlotTask;
-import dev.isxander.kanzicontrol.entityhandler.subtasks.SubTask;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
@@ -36,17 +35,4 @@ public class AutoEatTask extends AbstractAutoPlayerTask {
         queueTask(new SelectSlotTask(this, foodSlot, true));
         queueTask(new EatTask());
     }
-
-    public static class EatTask implements SubTask {
-        @Override
-        public void start() {
-            TouchInput.INSTANCE.startUseItem();
-        }
-
-        @Override
-        public boolean shouldFinish() {
-            return !TouchInput.INSTANCE.isUsingItem();
-        }
-    }
-
 }

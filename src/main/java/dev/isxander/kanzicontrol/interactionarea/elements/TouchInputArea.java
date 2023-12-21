@@ -23,14 +23,24 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
         int width = (int) (windowSize().x() / 3f);
         int height = (int) (windowSize().y() / 3f);
 
-        insertTop(new DirectionArea(0, 0, width, height, -1, -1, false)); // up and left
-        insertTop(new DirectionArea(width, 0, width, height, 0, -1, true)); // up
-        insertTop(new DirectionArea(width * 2, 0, width, height, 1, -1, false)); // up and right
-        insertTop(new DirectionArea(0, height, width, height, -1, 0, false)); // left
-        insertTop(new DirectionArea(width * 2, height, width, height, 1, 0, false)); // right
-        insertTop(new DirectionArea(0, height * 2, width, height, -1, 1, false)); // down and left
-        insertTop(new DirectionArea(width, height * 2, width, height, 0, 1, true)); // down
-        insertTop(new DirectionArea(width * 2, height * 2, width, height, 1, 1, false)); // down right
+        boolean diagonalZones = true;
+
+        if (diagonalZones) {
+            insertTop(new DirectionArea(0, 0, width, height, -1, -1, false)); // up and left
+            insertTop(new DirectionArea(width, 0, width, height, 0, -1, true)); // up
+            insertTop(new DirectionArea(width * 2, 0, width, height, 1, -1, false)); // up and right
+            insertTop(new DirectionArea(0, height, width, height, -1, 0, false)); // left
+            insertTop(new DirectionArea(width * 2, height, width, height, 1, 0, false)); // right
+            insertTop(new DirectionArea(0, height * 2, width, height, -1, 1, false)); // down and left
+            insertTop(new DirectionArea(width, height * 2, width, height, 0, 1, true)); // down
+            insertTop(new DirectionArea(width * 2, height * 2, width, height, 1, 1, false)); // down right
+        } else {
+            // insert left, right, up, down. make sure to leave no gaps, left and right should take the diagonal zone area
+            insertTop(new DirectionArea(0, 0, width, height * 3, -1, 0, false)); // left
+            insertTop(new DirectionArea(width * 2, 0, width, height * 3, 1, 0, false)); // right
+            insertTop(new DirectionArea(width, 0, width, height, 0, -1, true)); // up
+            insertTop(new DirectionArea(width, height * 2, width, height, 0, 1, true)); // down
+        }
 
         insertTop(new WalkArea(width, height, width, height)); // middle walk area
     }
@@ -210,6 +220,11 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
                 return true;
             }
             return false;
+        }
+
+        @Override
+        public void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
+
         }
     }
 }
