@@ -8,13 +8,39 @@ version = "2.20.2"
 
 repositories {
     mavenCentral()
-    maven("https://maven.isxander.dev/releases")
-    maven("https://maven.isxander.dev/snapshots")
-    maven("https://jitpack.io")
-    maven("https://maven.quiltmc.org/repository/release")
-    maven("https://maven.terraformersmc.com/releases")
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
-    maven("https://maven.ladysnake.org/releases")
+    exclusiveContent {
+        forRepository {
+            maven("https://maven.isxander.dev/releases")
+        }
+        filter {
+            includeGroup("dev.isxander")
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven("https://maven.quiltmc.org/repository/release")
+        }
+        filter {
+            includeGroup("org.quiltmc.parsers")
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven("https://maven.terraformersmc.com/releases")
+        }
+        filter {
+            includeGroup("com.terraformersmc")
+        }
+    }
+    exclusiveContent {
+        forRepository {
+            maven("https://maven.ladysnake.org/releases")
+        }
+        filter {
+            includeGroup("com.github.0x3C50")
+            includeGroup("io.github.ladysnake")
+        }
+    }
 }
 
 val minecraftVersion = libs.versions.minecraft.get()
@@ -22,18 +48,18 @@ val minecraftVersion = libs.versions.minecraft.get()
 dependencies {
     minecraft(libs.minecraft)
     mappings(loom.layered {
-        mappings("org.quiltmc:quilt-mappings:$minecraftVersion+build.${libs.versions.quilt.mappings.get()}:intermediary-v2")
         officialMojangMappings()
     })
     modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
 
-    modImplementation(libs.yet.another.config.lib)
-
-    libs.mixin.extras.let {
-        implementation(it)
+    libs.fabric.api.let {
+        modImplementation(it)
         include(it)
-        annotationProcessor(it)
+    }
+
+    libs.yet.another.config.lib.let {
+        modImplementation(it)
+        include(it)
     }
 
     libs.quilt.json5.let {
@@ -41,7 +67,14 @@ dependencies {
         include(it)
     }
 
-    include(modImplementation("com.github.0x3C50:Renderer:e5d9998655")!!)
+    "com.github.0x3C50:Renderer:e5d9998655".let {
+        modImplementation(it)
+        include(it)
+    }
+}
+
+java.toolchain {
+    languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 tasks {
