@@ -164,7 +164,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
 
         @Override
         public void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
-            graphics.fill(x, y, x + width, y + height, interacting ? 0x60FFFFFF : debugColor);
+            //graphics.fill(x, y, x + width, y + height, interacting ? 0x60FFFFFF : debugColor);
         }
     }
 

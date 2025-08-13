@@ -24,6 +24,7 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EndCrystalRenderer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.world.entity.player.Player;
 
@@ -35,6 +36,7 @@ public class KanziControl implements ClientModInitializer {
     private KeyMapping toggleKey;
     private KeyMapping indicateTouchUp, indicateTouchDown, indicateTouchLeft, indicateTouchRight;
     private KeyMapping moveCursorUp, moveCursorDown, moveCursorLeft, moveCursorRight;
+    private KeyMapping autoDeployElytraToggleKey;
 
     @Override
     public void onInitializeClient() {
@@ -56,6 +58,7 @@ public class KanziControl implements ClientModInitializer {
         KeyBindingHelper.registerKeyBinding(moveCursorDown = new KeyMapping("Cursor Down", InputConstants.KEY_DOWN, "Bonobocraft"));
         KeyBindingHelper.registerKeyBinding(moveCursorLeft = new KeyMapping("Cursor Left", InputConstants.KEY_LEFT, "Bonobocraft"));
         KeyBindingHelper.registerKeyBinding(moveCursorRight = new KeyMapping("Cursor Right", InputConstants.KEY_RIGHT, "Bonobocraft"));
+        KeyBindingHelper.registerKeyBinding(autoDeployElytraToggleKey = new KeyMapping("Toggle Auto Elytra Deployment", InputConstants.KEY_J, "Bonobocraft"));
 
         setupPacketReceivers();
 
@@ -121,6 +124,18 @@ public class KanziControl implements ClientModInitializer {
             RootInteractionArea.getInstance().TOUCH_LOOK.indicateRight(100);
         }
 
+        while (autoDeployElytraToggleKey.consumeClick()) {
+            boolean enabled = KanziConfig.INSTANCE.instance().autoDeployElytra = !KanziConfig.INSTANCE.instance().autoDeployElytra;
+            KanziConfig.INSTANCE.serializer().save();
+            client.player.displayClientMessage(Component.literal("Auto Elytra Deployment is now " + (enabled ? "enabled" : "disabled")), true);
+        }
+
+        if (client.player != null) {
+            if (KanziConfig.INSTANCE.instance().autoDeployElytra && !client.player.isFallFlying() && client.player.fallDistance > 2.5f) {
+                this.setElytraFlight(true, client.player);
+            }
+        }
+
         int x = 0, y = 0;
         if (moveCursorUp.isDown()) y--;
         if (moveCursorDown.isDown()) y++;
@@ -133,9 +148,10 @@ public class KanziControl implements ClientModInitializer {
 
     public void setElytraFlight(boolean enabled, LocalPlayer player) {
         if (enabled) {
-            player.getAbilities().flying = false;
-            player.onUpdateAbilities();
             if (player.tryToStartFallFlying()) {
+                player.getAbilities().flying = false;
+                player.onUpdateAbilities();
+
                 player.connection.send(new ServerboundPlayerCommandPacket(player, ServerboundPlayerCommandPacket.Action.START_FALL_FLYING));
             }
         } else {

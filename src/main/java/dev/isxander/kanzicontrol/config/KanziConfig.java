@@ -83,6 +83,11 @@ public class KanziConfig {
     @SerialEntry
     public float fireworkCooldown = 5f;
 
+    @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
+    @TickBox
+    @SerialEntry
+    public boolean autoDeployElytra = true;
+
     @AutoGen(category = RENDERING, group = BLOCK_OVERLAY)
     @TickBox
     @SerialEntry

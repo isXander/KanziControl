@@ -32,8 +32,8 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
                         /* ATK */ //.element(new ButtonInteractionArea(Lexigrams.FIGHT, 32f, 32f, ButtonActions.FIGHT, ButtonRenderPredicates.ALWAYS))
                         /* USE */ //.element(new ButtonInteractionArea(Lexigrams.USE, 32f, 32f, ButtonActions.USE, ButtonRenderPredicates.ALWAYS))
                         /* SWM */ //.element(new ButtonInteractionArea(Lexigrams.TOGGLE_SWIM_DOWN, 32f, 32f, ButtonActions.TOGGLE_SWIM_DOWN, ButtonRenderPredicates.ALWAYS))
-                        /* EAT */ .element(new EatButtonArea(32f, 32f))
-                        /* GVE */ .elementIf(
+                        /* EAT */ //.element(new EatButtonArea(32f, 32f))
+                        /* GVE */ /*.elementIf(
                                 KanziConfig.INSTANCE.instance().shareButton,
                                 () -> new ButtonInteractionArea(
                                         Lexigrams.GIVE,
@@ -41,14 +41,8 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
                                         ButtonActions.SHARE,
                                         ButtonRenderPredicates.PLAYER_NEARBY_SHARING
                                 )
-                        )
-                        /* CLH */ .element(new ButtonInteractionArea(Lexigrams.CLUTCH, 32f, 32f, ButtonActions.WATER_BUCKET_CLUTCH, ButtonRenderPredicates.FALLING))
-                        /* FLY */ .element(new ButtonInteractionArea(
-                                Lexigrams.FIGHT,
-                                32f, 32f,
-                                ButtonActions.ELYTRA_FLY,
-                                ButtonRenderPredicates.CAN_ELYTRA_FLY
-                        ))
+                        )*/
+                        /* CLH */ //.element(new ButtonInteractionArea(Lexigrams.CLUTCH, 32f, 32f, ButtonActions.WATER_BUCKET_CLUTCH, ButtonRenderPredicates.FALLING))
                         .elementPadding(10f)
                         .elementPosition(RowInteractionArea.ElementPosition.MIDDLE)
                         .position(AnchorPoint.TOP_CENTER, 0f, -19f, AnchorPoint.TOP_CENTER)

@@ -159,7 +159,6 @@ public class ColumnInteractionArea extends AbstractInteractionAreaContainer<Posi
         }
 
         public ColumnInteractionArea build() {
-            Validate.notEmpty(elements, "No elements were added to the row!");
             Validate.notNull(elementPosition, "Element position cannot be null!");
 
             return new ColumnInteractionArea(
