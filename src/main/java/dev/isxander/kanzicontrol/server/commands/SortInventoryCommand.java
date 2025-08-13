@@ -1,7 +1,7 @@
 package dev.isxander.kanzicontrol.server.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
-import dev.isxander.kanzicontrol.server.ClientboundSortInventoryPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundSortInventoryPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

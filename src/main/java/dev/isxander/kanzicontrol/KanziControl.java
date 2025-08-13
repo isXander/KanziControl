@@ -8,6 +8,10 @@ import dev.isxander.kanzicontrol.indicator.IndicatorHandlerManager;
 import dev.isxander.kanzicontrol.interactionarea.RootInteractionArea;
 import dev.isxander.kanzicontrol.mixins.MouseHandlerAccessor;
 import dev.isxander.kanzicontrol.server.*;
+import dev.isxander.kanzicontrol.server.packets.ClientboundElytraPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundKanziIndicatorPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundSetClientTagPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundSortInventoryPacket;
 import dev.isxander.kanzicontrol.utils.ClientTagHolder;
 import dev.isxander.kanzicontrol.utils.InventoryUtils;
 import dev.isxander.yacl3.config.v2.impl.autogen.OptionFactoryRegistry;
@@ -18,7 +22,9 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.entity.EndCrystalRenderer;
+import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.world.entity.player.Player;
 
 import static dev.isxander.kanzicontrol.server.KanziControlMain.LOGGER;
@@ -79,6 +85,10 @@ public class KanziControl implements ClientModInitializer {
                 }
             }
         });
+
+        ClientPlayNetworking.registerGlobalReceiver(ClientboundElytraPacket.TYPE, (packet, player, sender) -> {
+            this.setElytraFlight(packet.enable(), player);
+        });
     }
 
     private void tick(Minecraft client) {
@@ -118,6 +128,23 @@ public class KanziControl implements ClientModInitializer {
         if (moveCursorRight.isDown()) x++;
         if (x != 0 && y != 0) {
             RootInteractionArea.getInstance().CURSOR_DISPLAY.moveCursor(x * 10, y * 10);
+        }
+    }
+
+    public void setElytraFlight(boolean enabled, LocalPlayer player) {
+        if (enabled) {
+            player.getAbilities().flying = false;
+            player.onUpdateAbilities();
+            if (player.tryToStartFallFlying()) {
+                player.connection.send(new ServerboundPlayerCommandPacket(player, ServerboundPlayerCommandPacket.Action.START_FALL_FLYING));
+            }
+        } else {
+            player.stopFallFlying();
+
+            if (player.getAbilities().mayfly) {
+                player.getAbilities().flying = true;
+                player.onUpdateAbilities();
+            }
         }
     }
 

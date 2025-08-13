@@ -43,6 +43,12 @@ public class RootInteractionArea extends AbstractInteractionAreaContainer<Intera
                                 )
                         )
                         /* CLH */ .element(new ButtonInteractionArea(Lexigrams.CLUTCH, 32f, 32f, ButtonActions.WATER_BUCKET_CLUTCH, ButtonRenderPredicates.FALLING))
+                        /* FLY */ .element(new ButtonInteractionArea(
+                                Lexigrams.FIGHT,
+                                32f, 32f,
+                                ButtonActions.ELYTRA_FLY,
+                                ButtonRenderPredicates.CAN_ELYTRA_FLY
+                        ))
                         .elementPadding(10f)
                         .elementPosition(RowInteractionArea.ElementPosition.MIDDLE)
                         .position(AnchorPoint.TOP_CENTER, 0f, -19f, AnchorPoint.TOP_CENTER)

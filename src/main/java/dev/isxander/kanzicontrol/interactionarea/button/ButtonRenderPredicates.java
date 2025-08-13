@@ -76,6 +76,10 @@ public final class ButtonRenderPredicates {
             FALLING = predicate("falling", ctx -> {
                 LocalPlayer player = Minecraft.getInstance().player;
                 return player.fallDistance > 2.5;
+            }),
+            CAN_ELYTRA_FLY = predicate("can_elytra_fly", ctx -> {
+                LocalPlayer player = Minecraft.getInstance().player;
+                return !player.isFallFlying() && !player.onGround();
             });
 
     private static ButtonRenderPredicate predicate(String id, ButtonRenderPredicate predicate) {

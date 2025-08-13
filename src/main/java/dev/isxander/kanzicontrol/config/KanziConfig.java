@@ -52,7 +52,13 @@ public class KanziConfig {
     @FloatSlider(min = 0.5f, max = 10f, step = 0.5f)
     @FormatTranslation(FMT_SECONDS)
     @SerialEntry
-    public float verticalResetDelay = 3f;
+    public float verticalResetDelay = 4f;
+
+    @AutoGen(category = TOUCH_CONTROLS, group = LOOKING)
+    @FloatSlider(min = -90f, max = 90f, step = 10f)
+    @FormatTranslation(FMT_DEGREES)
+    @SerialEntry
+    public float verticalResetPitch = 12f;
 
     @AutoGen(category = TOUCH_CONTROLS, group = LOOKING)
     @IntSlider(min = 0, max = 90, step = 5)
@@ -65,18 +71,17 @@ public class KanziConfig {
     @SerialEntry
     public boolean allowDiagonalLooking = true;
 
-
-    @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
-    @FloatSlider(min = 0.1f, max = 1f, step = 0.1f)
-    @CustomFormat(ValueFormatters.PercentFormatter.class)
-    @SerialEntry
-    public float touchForwardRadius = 0.33f;
-
     @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
     @FloatSlider(min = 0.1f, max = 5f, step = 0.1f)
     @FormatTranslation(FMT_SECONDS)
     @SerialEntry
     public float walkForwardDuration = 1f;
+
+    @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
+    @FloatSlider(min = 0f, max = 20f, step = 1f)
+    @FormatTranslation(FMT_SECONDS)
+    @SerialEntry
+    public float fireworkCooldown = 5f;
 
     @AutoGen(category = RENDERING, group = BLOCK_OVERLAY)
     @TickBox

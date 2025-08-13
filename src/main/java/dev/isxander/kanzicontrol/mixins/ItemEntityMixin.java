@@ -1,6 +1,6 @@
 package dev.isxander.kanzicontrol.mixins;
 
-import dev.isxander.kanzicontrol.server.ClientboundSortInventoryPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundSortInventoryPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.item.ItemEntity;

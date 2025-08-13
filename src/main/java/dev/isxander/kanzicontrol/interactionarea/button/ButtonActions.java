@@ -1,5 +1,6 @@
 package dev.isxander.kanzicontrol.interactionarea.button;
 
+import dev.isxander.kanzicontrol.KanziControl;
 import dev.isxander.kanzicontrol.TouchInput;
 import dev.isxander.kanzicontrol.entityhandler.tasks.AutoEatTask;
 import dev.isxander.kanzicontrol.entityhandler.tasks.ShareTaskClickHandler;
@@ -36,7 +37,8 @@ public class ButtonActions {
             HOTBAR_SLOT_6 = action("hotbar_slot_6", ButtonAction.down(() -> minecraft.player.getInventory().selected = 5)),
             HOTBAR_SLOT_7 = action("hotbar_slot_7", ButtonAction.down(() -> minecraft.player.getInventory().selected = 6)),
             HOTBAR_SLOT_8 = action("hotbar_slot_8", ButtonAction.down(() -> minecraft.player.getInventory().selected = 7)),
-            HOTBAR_SLOT_9 = action("hotbar_slot_9", ButtonAction.down(() -> minecraft.player.getInventory().selected = 8));
+            HOTBAR_SLOT_9 = action("hotbar_slot_9", ButtonAction.down(() -> minecraft.player.getInventory().selected = 8)),
+            ELYTRA_FLY = action("elytra_fly", ButtonAction.down(() -> KanziControl.get().setElytraFlight(true, minecraft.player)).withNarration("elytra").cooldown(1000));
 
     public static ButtonAction command(String command) {
         if (command.startsWith("/"))

@@ -2,7 +2,7 @@ package dev.isxander.kanzicontrol.server.commands;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import dev.isxander.kanzicontrol.server.ClientboundSetClientTagPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundSetClientTagPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

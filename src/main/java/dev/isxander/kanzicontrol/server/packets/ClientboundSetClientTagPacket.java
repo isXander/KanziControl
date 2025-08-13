@@ -1,4 +1,4 @@
-package dev.isxander.kanzicontrol.server;
+package dev.isxander.kanzicontrol.server.packets;
 
 import net.fabricmc.fabric.api.networking.v1.FabricPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketType;

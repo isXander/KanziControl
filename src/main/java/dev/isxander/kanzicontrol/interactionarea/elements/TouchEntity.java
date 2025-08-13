@@ -56,7 +56,7 @@ public class TouchEntity implements InteractionArea {
         if (currentHandler == null) {
             currentHandler = handlerQueue.poll();
             if (currentHandler != null) {
-                TouchInput.INSTANCE.setForward(0);
+                TouchInput.INSTANCE.cancelForward();
                 RootInteractionArea.getInstance().TOUCH_LOOK.stopNow();
 
                 currentHandler.start();

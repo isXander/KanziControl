@@ -15,7 +15,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
     private static final int RESET_TICKS = 20*4;
 
     private Animator.AnimationInstance movementAnimation, resetAnimation;
-    private int ticksTillReset = RESET_TICKS;
+    private int ticksTillReset = 0;
 
     private int upTicks = 0, downTicks = 0, leftTicks = 0, rightTicks = 0;
 
@@ -23,9 +23,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
         int width = (int) (windowSize().x() / 3f);
         int height = (int) (windowSize().y() / 3f);
 
-        boolean diagonalZones = true;
-
-        if (diagonalZones) {
+        if (KanziConfig.INSTANCE.instance().allowDiagonalLooking) {
             insertTop(new DirectionArea(0, 0, width, height, -1, -1, false)); // up and left
             insertTop(new DirectionArea(width, 0, width, height, 0, -1, true)); // up
             insertTop(new DirectionArea(width * 2, 0, width, height, 1, -1, false)); // up and right
@@ -43,6 +41,8 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
         }
 
         insertTop(new WalkArea(width, height, width, height)); // middle walk area
+
+        restartResetDelay();
     }
 
     @Override
@@ -100,7 +100,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
                 movementAnimation = null;
 
                 LocalPlayer player = minecraft().player;
-                float resetDegrees = -player.getXRot() + 12f;
+                float resetDegrees = -player.getXRot() + KanziConfig.INSTANCE.instance().verticalResetPitch;
                 resetAnimation = Animator.INSTANCE.play(new Animator.AnimationInstance(calculateTickDuration(resetDegrees), Animator::linear)
                         .addDeltaConsumer(f -> player.turn(0, f / 0.15), 0, resetDegrees));
             }
@@ -127,7 +127,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
     }
 
     public void restartResetDelay() {
-        ticksTillReset = RESET_TICKS;
+        ticksTillReset = (int) (20f * KanziConfig.INSTANCE.instance().verticalResetDelay);
     }
 
     public void stopNow() {
@@ -164,7 +164,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
 
         @Override
         public void render(GuiGraphics graphics, float deltaTime, Vector2fc position, boolean interacting) {
-            //graphics.fill(x, y, x + width, y + height, interacting ? 0x60FFFFFF : debugColor);
+            graphics.fill(x, y, x + width, y + height, interacting ? 0x60FFFFFF : debugColor);
         }
     }
 
@@ -216,7 +216,7 @@ public class TouchInputArea extends AbstractInteractionAreaContainer<Interaction
         @Override
         public boolean fingerDown(Vector2fc position) {
             if (!TouchInput.INSTANCE.isMovingForward()) {
-                TouchInput.INSTANCE.setForward((int) (KanziConfig.INSTANCE.instance().walkForwardDuration / 0.05f));
+                TouchInput.INSTANCE.pressForward();
                 return true;
             }
             return false;

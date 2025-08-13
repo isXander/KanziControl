@@ -1,9 +1,6 @@
 package dev.isxander.kanzicontrol.server;
 
-import dev.isxander.kanzicontrol.server.commands.ClientTagCommand;
-import dev.isxander.kanzicontrol.server.commands.DragonFightCommand;
-import dev.isxander.kanzicontrol.server.commands.IndicateCommand;
-import dev.isxander.kanzicontrol.server.commands.SortInventoryCommand;
+import dev.isxander.kanzicontrol.server.commands.*;
 import dev.isxander.kanzicontrol.utils.PublicMobEffect;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -47,6 +44,7 @@ public class KanziControlMain implements ModInitializer {
             SortInventoryCommand.registerCommand(dispatcher);
             ClientTagCommand.registerCommand(dispatcher);
             DragonFightCommand.registerCommand(dispatcher);
+            ElytraCommand.registerCommand(dispatcher);
         });
     }
 }

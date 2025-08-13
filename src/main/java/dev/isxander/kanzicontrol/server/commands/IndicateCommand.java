@@ -3,7 +3,7 @@ package dev.isxander.kanzicontrol.server.commands;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.ArgumentBuilder;
-import dev.isxander.kanzicontrol.server.ClientboundKanziIndicatorPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundKanziIndicatorPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;

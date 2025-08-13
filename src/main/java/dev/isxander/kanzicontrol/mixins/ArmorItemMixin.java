@@ -1,7 +1,7 @@
 package dev.isxander.kanzicontrol.mixins;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import dev.isxander.kanzicontrol.server.ClientboundSortInventoryPacket;
+import dev.isxander.kanzicontrol.server.packets.ClientboundSortInventoryPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.core.BlockSource;
 import net.minecraft.server.level.ServerPlayer;
