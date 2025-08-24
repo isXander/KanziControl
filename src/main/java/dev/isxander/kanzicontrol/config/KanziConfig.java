@@ -88,6 +88,11 @@ public class KanziConfig {
     @SerialEntry
     public boolean autoDeployElytra = true;
 
+    @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
+    @TickBox
+    @SerialEntry
+    public boolean sneakOnEdges = false;
+
     @AutoGen(category = RENDERING, group = BLOCK_OVERLAY)
     @TickBox
     @SerialEntry

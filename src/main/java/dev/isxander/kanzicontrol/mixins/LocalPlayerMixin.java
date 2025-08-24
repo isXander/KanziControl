@@ -69,7 +69,7 @@ public abstract class LocalPlayerMixin extends AbstractClientPlayer {
      */
     @Inject(method = "move", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/player/AbstractClientPlayer;move(Lnet/minecraft/world/entity/MoverType;Lnet/minecraft/world/phys/Vec3;)V", shift = At.Shift.BEFORE))
     private void onMovePre(MoverType movementType, Vec3 movement, CallbackInfo ci) {
-        if (KanziConfig.INSTANCE.instance().enabled) {
+        if (KanziConfig.INSTANCE.instance().enabled && KanziConfig.INSTANCE.instance().sneakOnEdges) {
             isAboutToFall = checkWillFall(movement, movementType);
         } else {
             isAboutToFall = false;
