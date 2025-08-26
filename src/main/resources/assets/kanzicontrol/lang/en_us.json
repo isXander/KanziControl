@@ -25,6 +25,8 @@
   "yacl3.config.kanzicontrol:config.fireworkCooldown.desc": "How long between firework launches.",
   "yacl3.config.kanzicontrol:config.autoDeployElytra": "Auto-deploy elytra",
   "yacl3.config.kanzicontrol:config.autoDeployElytra.desc": "Whether to automatically deploy the elytra if falling for more than 2.5 blocks.",
+  "yacl3.config.kanzicontrol:config.sneakOnEdges": "Sneak on edges",
+  "yacl3.config.kanzicontrol:config.sneakOnEdges.desc": "Automatically sneak when on the edge of a block to prevent falling off.",
   "yacl3.config.kanzicontrol:config.forwardOverlayColor": "Forward overlay color",
   "yacl3.config.kanzicontrol:config.forwardOverlayColor.desc": "The color of the overlay that signifies where the monkey needs to tap to walk forward.",
   "yacl3.config.kanzicontrol:config.disableForwardOverlay": "Disable forward overlay",

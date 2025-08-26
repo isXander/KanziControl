@@ -37,6 +37,7 @@
     "EnderDragonMixin",
     "EntityMixin",
     "EntityTypeMixin",
+    "FireworkRocketEntityMixin",
     "GiveCommandMixin",
     "ItemEntityMixin",
     "PlayerMixin",

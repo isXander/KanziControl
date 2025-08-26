@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "dev.isxander"
-version = "3.0.0"
+version = "3.0.3"
 
 repositories {
     mavenCentral()
