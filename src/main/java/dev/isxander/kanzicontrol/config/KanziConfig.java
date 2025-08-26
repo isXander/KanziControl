@@ -93,6 +93,11 @@ public class KanziConfig {
     @SerialEntry
     public boolean sneakOnEdges = false;
 
+    @AutoGen(category = TOUCH_CONTROLS, group = WALKING)
+    @TickBox
+    @SerialEntry
+    public boolean fireworkParticles = false;
+
     @AutoGen(category = RENDERING, group = BLOCK_OVERLAY)
     @TickBox
     @SerialEntry

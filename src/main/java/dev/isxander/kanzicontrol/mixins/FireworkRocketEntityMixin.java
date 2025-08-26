@@ -2,9 +2,11 @@ package dev.isxander.kanzicontrol.mixins;
 
 import com.llamalad7.mixinextras.expression.Definition;
 import com.llamalad7.mixinextras.expression.Expression;
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.isxander.kanzicontrol.config.KanziConfig;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -54,5 +56,10 @@ public abstract class FireworkRocketEntityMixin extends Projectile {
     private Vec3 modifyAttachedRocketSpeed(Vec3 instance, double x, double y, double z, Operation<Vec3> original) {
         float m = this.entityData.get(DATA_SPEED_MULTIPLIER);
         return original.call(instance, x*m, y*m, z*m);
+    }
+
+    @WrapWithCondition(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
+    private boolean shouldAddParticles(Level instance, ParticleOptions particleOptions, double d, double e, double f, double g, double h, double i) {
+        return KanziConfig.INSTANCE.instance().fireworkParticles;
     }
 }
